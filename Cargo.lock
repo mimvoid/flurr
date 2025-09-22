@@ -523,8 +523,6 @@ name = "rimice"
 version = "0.1.0"
 dependencies = [
  "argh",
- "gio",
- "glib",
  "gtk4",
  "rimicore",
 ]
@@ -533,8 +531,6 @@ dependencies = [
 name = "rimicore"
 version = "0.1.0"
 dependencies = [
- "gio",
- "glib",
  "gtk4",
 ]
 

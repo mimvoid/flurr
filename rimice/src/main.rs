@@ -1,7 +1,5 @@
-use gtk4 as gtk;
-use gtk::prelude::*;
-use gtk::Application;
-use gio::ApplicationCommandLine;
+use gtk::{glib, gio::ApplicationCommandLine};
+use gtk::{prelude::*, Application};
 
 fn main() -> glib::ExitCode {
     let args: Args = argh::from_env();

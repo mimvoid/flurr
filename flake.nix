@@ -16,7 +16,6 @@
             pkg-config
             rustc
             cargo
-            blueprint-compiler
 
             rust-analyzer
             rustfmt
@@ -31,6 +30,18 @@
           shellHook = ''
             export GTK_THEME=Adwaita
           '';
+        };
+
+        rimicore = pkgs.mkShell {
+          name = "Rimicore";
+
+          nativeBuildInputs = with pkgs.buildPackages; [
+            meson
+            ninja
+            vala
+            gcc
+            vala-language-server
+          ];
         };
       });
     };

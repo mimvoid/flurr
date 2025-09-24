@@ -524,14 +524,6 @@ version = "0.1.0"
 dependencies = [
  "argh",
  "gtk4",
- "rimicore",
-]
-
-[[package]]
-name = "rimicore"
-version = "0.1.0"
-dependencies = [
- "gtk4",
 ]
 
 [[package]]

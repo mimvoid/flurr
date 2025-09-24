@@ -32,8 +32,8 @@
           '';
         };
 
-        rimicore = pkgs.mkShell {
-          name = "Rimicore";
+        core = pkgs.mkShell {
+          name = "Rimice-core";
 
           nativeBuildInputs = with pkgs.buildPackages; [
             meson

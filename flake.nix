@@ -12,7 +12,7 @@
         default = pkgs.mkShell {
           name = "Rimice";
 
-          nativeBuildInputs = with pkgs.buildPackages; [
+          packages = with pkgs; [
             pkg-config
             rustc
             cargo
@@ -20,9 +20,7 @@
             rust-analyzer
             rustfmt
             clippy
-          ];
 
-          buildInputs = with pkgs.buildPackages; [
             glib
             gtk4
           ];
@@ -35,7 +33,7 @@
         core = pkgs.mkShell {
           name = "Rimice-core";
 
-          nativeBuildInputs = with pkgs.buildPackages; [
+          packages = with pkgs; [
             meson
             ninja
             vala

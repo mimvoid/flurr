@@ -1,5 +1,7 @@
 sources = files(
     'Application.vala',
+    'widgets/Window.vala',
+    'widgets/PinWindow.vala',
 )
 
 rimice_lib = shared_library(

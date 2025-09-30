@@ -2,12 +2,17 @@ public static int main(string[] args) {
   var app = new Rimice.Application();
 
   app.activate.connect(() => {
-    var window = new Gtk.ApplicationWindow(app) {
+    var window = new Rimice.PinWindow(app) {
       title = "Example window",
       default_width = 480,
       default_height = 360,
     };
 
+    var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
+    box.append(new Gtk.Label("Rimice"));
+    box.append(new Gtk.Label("This is a widget."));
+
+    window.child = box;
     window.present();
   });
 

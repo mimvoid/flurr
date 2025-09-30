@@ -96,6 +96,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "flurr"
+version = "0.1.0"
+dependencies = [
+ "argh",
+ "gtk4",
+]
+
+[[package]]
 name = "futures-channel"
 version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -516,14 +524,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1885c039570dc00dcb4ff087a89e185fd56bae234ddc7f056a945bf36467248d"
 dependencies = [
  "proc-macro2",
-]
-
-[[package]]
-name = "rimice"
-version = "0.1.0"
-dependencies = [
- "argh",
- "gtk4",
 ]
 
 [[package]]

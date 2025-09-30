@@ -1,11 +1,11 @@
-[DBus(name = "com.Rimice.Application")]
-public class Rimice.Application : Gtk.Application {
+[DBus(name = "com.Flurr.Application")]
+public class Flurr.Application : Gtk.Application {
   public Application() {
-    Object(application_id: "com.Rimice.rimice");
+    Object(application_id: "com.Flurr.flurr");
   }
 
   public Application.with_name(string instance_name) {
-    Object(application_id: @"com.Rimice.$instance_name");
+    Object(application_id: @"com.Flurr.$instance_name");
   }
 
   [DBus(visible=false)]

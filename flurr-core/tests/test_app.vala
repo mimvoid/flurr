@@ -1,15 +1,15 @@
 public static int main(string[] args) {
-  var app = new Rimice.Application();
+  var app = new Flurr.Application();
 
   app.activate.connect(() => {
-    var window = new Rimice.PinWindow(app) {
+    var window = new Flurr.PinWindow(app) {
       title = "Example window",
       default_width = 480,
       default_height = 360,
     };
 
     var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
-    box.append(new Gtk.Label("Rimice"));
+    box.append(new Gtk.Label("Flurr"));
     box.append(new Gtk.Label("This is a widget."));
 
     window.child = box;

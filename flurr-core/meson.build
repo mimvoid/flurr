@@ -1,4 +1,4 @@
-project('Rimicore', ['vala', 'c'], version: '0.1.0', license: 'GPL3')
+project('Flurr', ['vala', 'c'], version: '0.1.0', license: 'GPL3')
 
 dependencies = [
     dependency('glib-2.0'),

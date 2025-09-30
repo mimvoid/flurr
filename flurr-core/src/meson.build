@@ -4,11 +4,11 @@ sources = files(
     'widgets/PinWindow.vala',
 )
 
-rimice_lib = shared_library(
-    'rimice',
+flurr_lib = shared_library(
+    'flurr',
     sources,
     dependencies: dependencies,
     install: true,
     install_dir: [true, true, true]
 )
-rimice_dep = declare_dependency(include_directories: include_directories('.'), link_with: rimice_lib)
+flurr_dep = declare_dependency(include_directories: include_directories('.'), link_with: flurr_lib)

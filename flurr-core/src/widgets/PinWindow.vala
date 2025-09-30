@@ -1,4 +1,4 @@
-public class Rimice.PinWindow : Rimice.Window {
+public class Flurr.PinWindow : Flurr.Window {
   public PinWindow(Gtk.Application app) {
     Object(application: app);
   }

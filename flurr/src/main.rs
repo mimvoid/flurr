@@ -9,7 +9,7 @@ fn main() -> glib::ExitCode {
     }
 
     let app = Application::builder()
-        .application_id("org.rimice.Rimice")
+        .application_id("org.flurr.Flurr")
         .build();
 
     app.connect_activate(activate);

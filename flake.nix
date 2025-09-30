@@ -1,5 +1,5 @@
 {
-  description = "Flake for Rimice, a widget system";
+  description = "Flake for Flurr, a widget system";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
   outputs = { self, nixpkgs }:
@@ -10,7 +10,7 @@
     {
       devShells = toSystems (pkgs: {
         default = pkgs.mkShell {
-          name = "Rimice";
+          name = "Flurr";
 
           packages = with pkgs; [
             pkg-config
@@ -32,7 +32,7 @@
         };
 
         core = pkgs.mkShell {
-          name = "Rimice-core";
+          name = "Flurr-core";
 
           packages = with pkgs; [
             meson

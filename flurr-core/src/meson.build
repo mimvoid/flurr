@@ -1,7 +1,7 @@
 sources = files(
     'Application.vala',
-    'widgets/Window.vala',
-    'widgets/PinWindow.vala',
+    'widgets/Shell.vala',
+    'widgets/PinShell.vala',
 )
 
 flurr_lib = shared_library(

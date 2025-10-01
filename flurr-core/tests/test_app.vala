@@ -2,18 +2,30 @@ public static int main(string[] args) {
   var app = new Flurr.Application();
 
   app.activate.connect(() => {
-    var window = new Flurr.PinWindow(app) {
+    var pin = new Flurr.PinShell(app) {
       title = "Example window",
-      default_width = 480,
-      default_height = 360,
     };
 
-    var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
-    box.append(new Gtk.Label("Flurr"));
-    box.append(new Gtk.Label("This is a widget."));
+    var pin_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
+    pin.child = pin_box;
 
-    window.child = box;
-    window.present();
+    pin_box.append(new Gtk.Label("Flurr"));
+    pin_box.append(new Gtk.Label("This is a widget."));
+
+    var bar = new Flurr.Shell(app) {
+      title = "Basic bar",
+      anchor = Flurr.Anchor.TOP | Flurr.Anchor.LEFT | Flurr.Anchor.RIGHT,
+      exclusion = Flurr.Exclusion.EXCLUSIVE,
+    };
+    bar.set_margins(Flurr.Edges.block_inline(6, 12));
+
+    var bar_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+    bar.child = bar_box;
+
+    bar_box.append(new Gtk.Label("This is another widget."));
+
+    pin.present();
+    bar.present();
   });
 
   return app.run(args);

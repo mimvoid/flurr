@@ -1,7 +1,4 @@
 public class Flurr.PinShell : Flurr.Shell {
-  int _saved_margin_top = 0;
-  int _saved_margin_left = 0;
-
   Gtk.MenuButton _menu_button = new Gtk.MenuButton() {
     visible = false
   };
@@ -92,22 +89,16 @@ public class Flurr.PinShell : Flurr.Shell {
   private void _add_gesture_drag() {
     var drag = new Gtk.GestureDrag();
 
-    drag.drag_begin.connect((self, _x, _y) => {
-      var w = (Flurr.PinShell) self.widget;
-      if (!w.unlocked)
-        return;
-
-      w._saved_margin_top = w.margin_top;
-      w._saved_margin_left = w.margin_left;
-    });
-
     drag.drag_update.connect((self, offset_x, offset_y) => {
       var w = (Flurr.PinShell) self.widget;
       if (!w.unlocked)
         return;
 
-      w.margin_top = w._saved_margin_top + (int) offset_y;
-      w.margin_left = w._saved_margin_left + (int) offset_x;
+      self.set_state(Gtk.EventSequenceState.CLAIMED);
+
+      var scale = w.get_surface().scale;
+      w.margin_top += (int) (scale * offset_y);
+      w.margin_left += (int) (scale * offset_x);
     });
 
     ((Gtk.Widget) this).add_controller(drag);

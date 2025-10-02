@@ -1,11 +1,11 @@
 [DBus(name = "com.Flurr.Application")]
 public class Flurr.Application : Gtk.Application {
   public Application() {
-    Object(application_id: "com.Flurr.flurr");
+    Object(application_id: "io.flurr.Flurr");
   }
 
   public Application.with_name(string instance_name) {
-    Object(application_id: @"com.Flurr.$instance_name");
+    Object(application_id: @"io.flurr.$instance_name");
   }
 
   public override void activate() {
@@ -14,7 +14,7 @@ public class Flurr.Application : Gtk.Application {
       return;
 
     var css = new Gtk.CssProvider();
-    css.load_from_resource("/com/Flurr/flurr/style.css");
+    css.load_from_resource("/io/flurr/Core/style.css");
     Gtk.StyleContext.add_provider_for_display(display, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
 

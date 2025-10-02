@@ -7,7 +7,7 @@ public static int main(string[] args) {
     };
 
     var pin_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);
-    pin.child = pin_box;
+    pin.overlay.child = pin_box;
 
     pin_box.append(new Gtk.Label("Flurr"));
     pin_box.append(new Gtk.Label("This is a widget."));

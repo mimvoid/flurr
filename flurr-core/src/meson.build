@@ -4,6 +4,8 @@ sources = files(
     'widgets/PinShell.vala',
 )
 
+sources += resources
+
 flurr_lib = shared_library(
     'flurr',
     sources,

@@ -1,1 +1,2 @@
 option('introspection', type: 'boolean', value: true, description: 'Create GObject Introspection file definitions')
+option('examples', type: 'boolean', value: true, description: 'Build example applications')

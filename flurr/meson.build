@@ -14,4 +14,7 @@ resources = import('gnome').compile_resources(
 )
 
 subdir('src')
-subdir('tests')
+
+if get_option('examples')
+    subdir('examples')
+endif

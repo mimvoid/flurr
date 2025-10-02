@@ -14,12 +14,12 @@
 
           packages = with pkgs; [
             pkg-config
-            rustc
-            cargo
 
-            rust-analyzer
-            rustfmt
-            clippy
+            meson
+            ninja
+            vala
+            gcc
+            vala-language-server
 
             glib
             gtk4
@@ -31,15 +31,16 @@
           '';
         };
 
-        core = pkgs.mkShell {
-          name = "Flurr-core";
+        ctl = pkgs.mkShell {
+          name = "Flurrctl";
 
           packages = with pkgs; [
-            meson
-            ninja
-            vala
-            gcc
-            vala-language-server
+            rustc
+            cargo
+
+            rust-analyzer
+            rustfmt
+            clippy
           ];
         };
       });

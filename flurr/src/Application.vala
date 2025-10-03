@@ -8,7 +8,7 @@ public class Flurr.Application : Gtk.Application {
     Object(application_id: @"io.flurr.$instance_name");
   }
 
-  public override void activate() {
+  protected override void activate() {
     var display = Gdk.Display.get_default();
     if (display == null)
       return;

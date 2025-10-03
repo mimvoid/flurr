@@ -15,7 +15,7 @@ public static int main(string[] args) {
     var bar = new Flurr.Shell(app) {
       title = "Basic bar",
       anchor = Flurr.Anchor.TOP | Flurr.Anchor.LEFT | Flurr.Anchor.RIGHT,
-      exclusion = Flurr.Exclusion.EXCLUSIVE,
+      auto_exclusive_zone = true,
     };
     bar.set_margins(Flurr.Edges.block_inline(6, 12));
 

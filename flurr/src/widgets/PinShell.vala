@@ -34,7 +34,7 @@ public class Flurr.PinShell : Flurr.Shell {
   construct {
     add_css_class("pin-shell");
     remove_css_class("background");
-    layer = GtkLayerShell.Layer.BOTTOM;
+    layer = Flurr.Layer.BOTTOM;
     anchor = Flurr.Anchor.TOP | Flurr.Anchor.LEFT;
     child = overlay;
 

@@ -1,18 +1,26 @@
+namespace Flurr {
 [Flags]
-public enum Flurr.Anchor {
+public enum Anchor {
   TOP,
   BOTTOM,
   LEFT,
   RIGHT,
 }
 
-public enum Flurr.Exclusion {
-  NORMAL,
-  EXCLUSIVE,
-  NONE,
+public enum Layer {
+  BACKGROUND = GtkLayerShell.Layer.BACKGROUND,
+  BOTTOM = GtkLayerShell.Layer.BOTTOM,
+  TOP = GtkLayerShell.Layer.TOP,
+  OVERLAY = GtkLayerShell.Layer.OVERLAY,
 }
 
-public struct Flurr.Edges {
+public enum KeyboardMode {
+  NONE = GtkLayerShell.KeyboardMode.NONE,
+  EXCLUSIVE = GtkLayerShell.KeyboardMode.EXCLUSIVE,
+  ON_DEMAND = GtkLayerShell.KeyboardMode.ON_DEMAND,
+}
+
+public struct Edges {
   public int top;
   public int right;
   public int bottom;
@@ -35,15 +43,10 @@ public struct Flurr.Edges {
   }
 }
 
-public class Flurr.Shell : Gtk.ApplicationWindow {
+public class Shell : Gtk.ApplicationWindow {
   public string namespace {
     get { return GtkLayerShell.get_namespace(this); }
     set { GtkLayerShell.set_namespace(this, value); }
-  }
-
-  public GtkLayerShell.Layer layer {
-    get { return GtkLayerShell.get_layer(this); }
-    set { GtkLayerShell.set_layer(this, value); }
   }
 
   public Gdk.Monitor? monitor {
@@ -51,59 +54,53 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     set { GtkLayerShell.set_monitor(this, value); }
   }
 
-  public GtkLayerShell.KeyboardMode keyboard_mode {
-    get { return GtkLayerShell.get_keyboard_mode(this); }
-    set { GtkLayerShell.set_keyboard_mode(this, value); }
+  public Layer layer {
+    get { return (Layer) GtkLayerShell.get_layer(this); }
+    set { GtkLayerShell.set_layer(this, (GtkLayerShell.Layer) value); }
   }
 
-  public Flurr.Exclusion exclusion {
-    get {
-      if (GtkLayerShell.auto_exclusive_zone_is_enabled(this)) {
-        return Flurr.Exclusion.EXCLUSIVE;
-      }
-      if (GtkLayerShell.get_exclusive_zone(this) < 0) {
-        return Flurr.Exclusion.NONE;
-      }
-      return Flurr.Exclusion.NORMAL;
-    }
+  public KeyboardMode keyboard_mode {
+    get { return (KeyboardMode) GtkLayerShell.get_keyboard_mode(this); }
+    set { GtkLayerShell.set_keyboard_mode(this, (GtkLayerShell.KeyboardMode) value); }
+  }
+
+  public int z_index {
+    get { return GtkLayerShell.get_exclusive_zone(this); }
+    set { GtkLayerShell.set_exclusive_zone(this, value); }
+  }
+
+  public bool auto_exclusive_zone {
+    get { return GtkLayerShell.auto_exclusive_zone_is_enabled(this); }
     set {
-      switch (value) {
-        case Flurr.Exclusion.NORMAL:
-          GtkLayerShell.set_exclusive_zone(this, 0);
-          break;
-        case Flurr.Exclusion.EXCLUSIVE:
-          GtkLayerShell.auto_exclusive_zone_enable(this);
-          break;
-        case Flurr.Exclusion.NONE:
-          GtkLayerShell.set_exclusive_zone(this, -1);
-          break;
-      }
+      if (value)
+        GtkLayerShell.auto_exclusive_zone_enable(this);
+      else
+        GtkLayerShell.set_exclusive_zone(this, z_index);
     }
   }
 
-  public Flurr.Anchor anchor {
+  public Anchor anchor {
     get {
       var result = (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.TOP))
-        ? Flurr.Anchor.TOP
+        ? Anchor.TOP
         : 0;
 
-      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.RIGHT)) {
-        result |= Flurr.Anchor.RIGHT;
-      }
-      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.BOTTOM)) {
-        result |= Flurr.Anchor.BOTTOM;
-      }
-      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.LEFT)) {
-        result |= Flurr.Anchor.LEFT;
-      }
+      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.RIGHT))
+        result |= Anchor.RIGHT;
+
+      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.BOTTOM))
+        result |= Anchor.BOTTOM;
+
+      if (GtkLayerShell.get_anchor(this, GtkLayerShell.Edge.LEFT))
+        result |= Anchor.LEFT;
 
       return result;
     }
     set {
-      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, Flurr.Anchor.TOP in value);
-      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, Flurr.Anchor.RIGHT in value);
-      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, Flurr.Anchor.BOTTOM in value);
-      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, Flurr.Anchor.LEFT in value);
+      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, Anchor.TOP in value);
+      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, Anchor.RIGHT in value);
+      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.BOTTOM, Anchor.BOTTOM in value);
+      GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, Anchor.LEFT in value);
     }
   }
 
@@ -111,7 +108,7 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     get { return GtkLayerShell.get_margin(this, GtkLayerShell.Edge.TOP); }
     set { GtkLayerShell.set_margin(this, GtkLayerShell.Edge.TOP, value); }
   }
-  public new int margin_right {
+  public int margin_right {
     get { return GtkLayerShell.get_margin(this, GtkLayerShell.Edge.RIGHT); }
     set { GtkLayerShell.set_margin(this, GtkLayerShell.Edge.RIGHT, value); }
   }
@@ -119,7 +116,7 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     get { return GtkLayerShell.get_margin(this, GtkLayerShell.Edge.BOTTOM); }
     set { GtkLayerShell.set_margin(this, GtkLayerShell.Edge.BOTTOM, value); }
   }
-  public new int margin_left {
+  public int margin_left {
     get { return GtkLayerShell.get_margin(this, GtkLayerShell.Edge.LEFT); }
     set { GtkLayerShell.set_margin(this, GtkLayerShell.Edge.LEFT, value); }
   }
@@ -133,8 +130,8 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     add_css_class("shell");
   }
 
-  public Flurr.Edges get_margins() {
-    return Flurr.Edges() {
+  public Edges get_margins() {
+    return Edges() {
       top = margin_top,
       right = margin_right,
       bottom = margin_bottom,
@@ -142,10 +139,11 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     };
   }
 
-  public void set_margins(Flurr.Edges margins) {
+  public void set_margins(Edges margins) {
     margin_top = margins.top;
     margin_right = margins.right;
     margin_bottom = margins.bottom;
     margin_left = margins.left;
   }
+}
 }

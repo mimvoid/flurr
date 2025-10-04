@@ -1,5 +1,8 @@
-public class Flurr.PinShell : Flurr.Shell {
-  Gtk.MenuButton _menu_button = new Gtk.MenuButton() {
+namespace Flurr {
+public class PinShell : Shell {
+  public bool unlocked { get; set; }
+
+  private Gtk.MenuButton _menu_button = new Gtk.MenuButton() {
     visible = false
   };
 
@@ -13,20 +16,6 @@ public class Flurr.PinShell : Flurr.Shell {
     };
   }
 
-  private bool _unlocked = false;
-  public bool unlocked {
-    get { return _unlocked; }
-    set {
-      if (value) {
-        _unlocked = true;
-        add_css_class("unlocked");
-      } else {
-        _unlocked = false;
-        remove_css_class("unlocked");
-      }
-    }
-  }
-
   public PinShell(Gtk.Application app) {
     Object(application: app);
   }
@@ -34,9 +23,18 @@ public class Flurr.PinShell : Flurr.Shell {
   construct {
     add_css_class("pin-shell");
     remove_css_class("background");
-    layer = Flurr.Layer.BOTTOM;
-    anchor = Flurr.Anchor.TOP | Flurr.Anchor.LEFT;
+    layer = Layer.BOTTOM;
+    anchor = Anchor.TOP | Anchor.LEFT;
     child = overlay;
+
+    notify["unlocked"].connect((self) => {
+      var w = (PinShell) self;
+      if (w.unlocked) {
+        add_css_class("unlocked");
+      } else {
+        remove_css_class("unlocked");
+      }
+    });
 
     add_action_entries({
       { "toggle_lock", () => { unlocked = !unlocked; } },
@@ -73,7 +71,7 @@ public class Flurr.PinShell : Flurr.Shell {
     var right_click = new Gtk.GestureClick() { button = Gdk.BUTTON_SECONDARY };
 
     right_click.pressed.connect((self, _n_pressed, x, y) => {
-      var w = (Flurr.PinShell) self.widget;
+      var w = (PinShell) self.widget;
       if (w.unlocked)
         return;
 
@@ -90,7 +88,7 @@ public class Flurr.PinShell : Flurr.Shell {
     var drag = new Gtk.GestureDrag();
 
     drag.drag_update.connect((self, offset_x, offset_y) => {
-      var w = (Flurr.PinShell) self.widget;
+      var w = (PinShell) self.widget;
       if (!w.unlocked)
         return;
 
@@ -103,4 +101,5 @@ public class Flurr.PinShell : Flurr.Shell {
 
     ((Gtk.Widget) this).add_controller(drag);
   }
+}
 }

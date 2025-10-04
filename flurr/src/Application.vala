@@ -1,7 +1,4 @@
-[DBus(name = "io.flurr.Application")]
 public class Flurr.Application : Gtk.Application {
-  private DBusConnection dbus_conn;
-
   public Application() {
     Object(application_id: "io.flurr.Flurr");
   }
@@ -10,21 +7,14 @@ public class Flurr.Application : Gtk.Application {
     Object(application_id: @"io.flurr.$instance_name");
   }
 
-  [DBus(visible=false)]
   protected override void activate() {
-    Bus.own_name(
-      BusType.SESSION,
-      application_id,
-      BusNameOwnerFlags.NONE,
-      (conn) => {
-        try {
-          this.dbus_conn = conn;
-          conn.register_object("/io/flurr/Application", this);
-        } catch (Error err) {
-          critical(err.message);
-        }
-      }
-    );
+    var app_dbus = new FlurrDBus.ApplicationService(this);
+    app_dbus.own_name(application_id);
+
+    foreach (var win in get_windows()) {
+      window_added_dbus(win);
+    }
+    window_added.connect(window_added_dbus);
 
     var display = Gdk.Display.get_default();
     if (display == null)
@@ -35,7 +25,6 @@ public class Flurr.Application : Gtk.Application {
     Gtk.StyleContext.add_provider_for_display(display, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
 
-  [DBus(visible=false)]
   public Gtk.Window? get_window_by_name(string name) {
     foreach (var window in get_windows()) {
       if (window.name == name) {
@@ -45,11 +34,24 @@ public class Flurr.Application : Gtk.Application {
     return null;
   }
 
-  public void toggle_window(string name) throws Error {
+  public void toggle_window(string name) throws IOError {
     var window = get_window_by_name(name);
     if (window == null) {
       throw new IOError.FAILED(@"Could not find a window named \"$name\"");
     }
     window.visible = !window.visible;
+  }
+
+  private void window_added_dbus(Gtk.Window window) {
+    if (!(window is Flurr.Shell))
+      return;
+
+    var shell_service = new FlurrDBus.ShellService((Flurr.Shell) window);
+    shell_service.own_name(application_id);
+
+    if (window is Flurr.PinShell) {
+      var pin_shell_service = new FlurrDBus.PinShellService((Flurr.PinShell) window);
+      pin_shell_service.own_name(application_id);
+    }
   }
 }

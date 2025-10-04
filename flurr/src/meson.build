@@ -1,7 +1,12 @@
 sources = files(
     'Application.vala',
+    'widgets/property_types.vala',
     'widgets/Shell.vala',
     'widgets/PinShell.vala',
+    'dbus/interfaces.vala',
+    'dbus/ApplicationService.vala',
+    'dbus/ShellService.vala',
+    'dbus/PinShellService.vala',
 )
 
 sources += resources

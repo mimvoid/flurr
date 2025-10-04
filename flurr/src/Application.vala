@@ -1,5 +1,7 @@
-[DBus(name = "com.Flurr.Application")]
+[DBus(name = "io.flurr.Application")]
 public class Flurr.Application : Gtk.Application {
+  private DBusConnection dbus_conn;
+
   public Application() {
     Object(application_id: "io.flurr.Flurr");
   }
@@ -8,7 +10,22 @@ public class Flurr.Application : Gtk.Application {
     Object(application_id: @"io.flurr.$instance_name");
   }
 
+  [DBus(visible=false)]
   protected override void activate() {
+    Bus.own_name(
+      BusType.SESSION,
+      application_id,
+      BusNameOwnerFlags.NONE,
+      (conn) => {
+        try {
+          this.dbus_conn = conn;
+          conn.register_object("/io/flurr/Application", this);
+        } catch (Error err) {
+          critical(err.message);
+        }
+      }
+    );
+
     var display = Gdk.Display.get_default();
     if (display == null)
       return;
@@ -28,7 +45,6 @@ public class Flurr.Application : Gtk.Application {
     return null;
   }
 
-  [DBus(visible=false)]
   public void toggle_window(string name) throws Error {
     var window = get_window_by_name(name);
     if (window == null) {

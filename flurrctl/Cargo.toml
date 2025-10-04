@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 argh = "0.1.13"
-gtk = { version = "0.10", package = "gtk4" }
+dbus = "0.9.9"

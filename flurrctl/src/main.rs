@@ -1,41 +1,59 @@
-use gtk::{glib, gio::ApplicationCommandLine};
-use gtk::{prelude::*, Application};
+use argh::FromArgs;
+use dbus::blocking::Connection;
+use std::time::Duration;
 
-fn main() -> glib::ExitCode {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Args = argh::from_env();
     if args.version {
         println!(env!("CARGO_PKG_VERSION"));
-        return glib::ExitCode::SUCCESS;
+        return Ok(());
     }
 
-    let app = Application::builder()
-        .application_id("org.flurr.Flurr")
-        .build();
+    let instance = args.instance;
 
-    app.connect_activate(activate);
-    app.connect_command_line(cli_command);
+    let conn = Connection::new_session()?;
+    let proxy = conn.with_proxy(
+        format!("io.flurr.{instance}"),
+        "/io/flurr/Application",
+        Duration::from_millis(5000),
+    );
 
-    app.run()
+    match args.nested {
+        Subcommands::Toggle(opts) => {
+            let _: () =
+                proxy.method_call("io.flurr.Application", "ToggleWindow", (opts.window_name,))?;
+        }
+    }
+
+    Ok(())
 }
 
-#[derive(argh::FromArgs, Debug)]
+#[derive(FromArgs, PartialEq, Debug)]
 /// Widget system
 struct Args {
     /// print the version and exit
     #[argh(switch)]
     version: bool,
+
+    /// the instance name, defaults to "Flurr"
+    #[argh(option, short = 'i', default = "String::from(\"Flurr\")")]
+    instance: String,
+
+    #[argh(subcommand)]
+    nested: Subcommands,
 }
 
-fn activate(_app: &Application) {
-
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand)]
+enum Subcommands {
+    Toggle(SubToggle),
 }
 
-fn cli_command(_app: &Application, _app_cli: &ApplicationCommandLine) -> glib::ExitCode {
-    let args: Args = argh::from_env();
-    if args.version {
-        println!(env!("CARGO_PKG_VERSION"));
-        return glib::ExitCode::SUCCESS
-    }
-
-    glib::ExitCode::SUCCESS
+#[derive(FromArgs, PartialEq, Debug)]
+/// Toggle a window by name
+#[argh(subcommand, name = "toggle")]
+struct SubToggle {
+    #[argh(positional)]
+    /// the name of the window
+    window_name: String,
 }

@@ -13,8 +13,6 @@
           name = "Flurr";
 
           packages = with pkgs; [
-            pkg-config
-
             meson
             ninja
             vala
@@ -33,6 +31,9 @@
 
         ctl = pkgs.mkShell {
           name = "Flurrctl";
+
+          nativeBuildInputs = [ pkgs.pkg-config ];
+          buildInputs = [ pkgs.dbus ];
 
           packages = with pkgs; [
             rustc

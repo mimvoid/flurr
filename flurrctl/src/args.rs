@@ -15,6 +15,10 @@ pub struct Cli {
 pub enum Commands {
     /// Toggle the visibility of a window
     Toggle(WindowCommand),
+    /// Make a window visible
+    Show(WindowCommand),
+    /// Make a window invisible
+    Hide(WindowCommand),
 }
 
 #[derive(Args)]

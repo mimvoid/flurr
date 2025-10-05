@@ -11,6 +11,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match &args.subcommand {
         Commands::Toggle(win) => toggle_window(instance.as_str(), &win),
+        Commands::Show(win) => show_window(instance.as_str(), &win),
+        Commands::Hide(win) => hide_window(instance.as_str(), &win),
     }?;
 
     Ok(())
@@ -24,6 +26,8 @@ macro_rules! with_window_methods {
     };
 }
 with_window_methods!(toggle_window, "ToggleWindow", "Toggle");
+with_window_methods!(show_window, "ShowWindow", "Show");
+with_window_methods!(hide_window, "HideWindow", "Hide");
 
 fn window_cmd(
     instance: &str,

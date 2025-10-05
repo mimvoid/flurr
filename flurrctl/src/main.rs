@@ -1,63 +1,55 @@
-use argh::FromArgs;
+use clap::Parser;
 use dbus::blocking::Connection;
 use std::time::Duration;
 
+mod args;
+use args::{Commands, WindowCommand};
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Args = argh::from_env();
-    if args.version {
-        println!(env!("CARGO_PKG_VERSION"));
-        return Ok(());
-    }
-
+    let args = args::Cli::parse();
     let instance = args.instance;
-    let dest = format!("io.flurr.{instance}");
 
-    let conn = Connection::new_session()?;
-    let app_proxy = conn.with_proxy(
-        dest,
-        format!("/io/flurr/{instance}"),
-        Duration::from_millis(5000),
-    );
-
-    match args.nested {
-        Subcommands::Toggle(opts) => {
-            let _: () = app_proxy.method_call(
-                "io.flurr.Application",
-                "ToggleWindow",
-                (opts.window_name,),
-            )?;
-        }
-    }
+    match &args.subcommand {
+        Commands::Toggle(win) => toggle_window(instance.as_str(), &win),
+    }?;
 
     Ok(())
 }
 
-#[derive(FromArgs, PartialEq, Debug)]
-/// Widget system
-struct Args {
-    /// print the version and exit
-    #[argh(switch)]
-    version: bool,
-
-    /// the instance name, defaults to "Flurr"
-    #[argh(option, short = 'i', default = "String::from(\"Flurr\")")]
-    instance: String,
-
-    #[argh(subcommand)]
-    nested: Subcommands,
+macro_rules! with_window_methods {
+    ($name: ident, $app_method: expr, $win_method: expr) => {
+        fn $name(instance: &str, opts: &WindowCommand) -> dbus::Result<()> {
+            window_cmd(instance, opts, $app_method, $win_method)
+        }
+    };
 }
+with_window_methods!(toggle_window, "ToggleWindow", "Toggle");
 
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand)]
-enum Subcommands {
-    Toggle(SubToggle),
-}
+fn window_cmd(
+    instance: &str,
+    opts: &WindowCommand,
+    app_method: &str,
+    win_method: &str,
+) -> dbus::Result<()> {
+    let conn = Connection::new_session()?;
 
-#[derive(FromArgs, PartialEq, Debug)]
-/// Toggle a window by name
-#[argh(subcommand, name = "toggle")]
-struct SubToggle {
-    #[argh(positional)]
-    /// the name of the window
-    window_name: String,
+    if let Some(name) = opts.name.as_deref() {
+        let proxy = conn.with_proxy(
+            format!("io.flurr.{instance}"),
+            format!("/io/flurr/{instance}"),
+            Duration::from_millis(5000),
+        );
+
+        let _: () = proxy.method_call("io.flurr.Application", app_method, (name,))?;
+    } else if let Some(id) = opts.id {
+        let proxy = conn.with_proxy(
+            format!("io.flurr.{instance}"),
+            format!("/io/flurr/{instance}/window/{id}"),
+            Duration::from_millis(5000),
+        );
+
+        let _: () = proxy.method_call("io.flurr.Window", win_method, ())?;
+    }
+
+    Ok(())
 }

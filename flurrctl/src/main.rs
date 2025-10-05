@@ -10,18 +10,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let instance = args.instance;
+    let dest = format!("io.flurr.{instance}");
 
     let conn = Connection::new_session()?;
-    let proxy = conn.with_proxy(
-        format!("io.flurr.{instance}"),
-        "/io/flurr/Application",
+    let app_proxy = conn.with_proxy(
+        dest,
+        format!("/io/flurr/{instance}"),
         Duration::from_millis(5000),
     );
 
     match args.nested {
         Subcommands::Toggle(opts) => {
-            let _: () =
-                proxy.method_call("io.flurr.Application", "ToggleWindow", (opts.window_name,))?;
+            let _: () = app_proxy.method_call(
+                "io.flurr.Application",
+                "ToggleWindow",
+                (opts.window_name,),
+            )?;
         }
     }
 

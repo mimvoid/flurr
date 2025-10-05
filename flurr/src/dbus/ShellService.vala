@@ -1,23 +1,12 @@
 public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object {
-  public Flurr.Shell shell { get; construct; }
+  public weak Flurr.Shell shell { get; construct; }
 
   public ShellService(Flurr.Shell shell) {
     Object(shell: shell);
   }
 
   protected void on_dbus_connect(GLib.DBusConnection conn) {
-    var id = shell.get_id();
-    if (id == 0) {
-      critical(@"Window \"$(shell.name)\" is unregistered, cannot add to DBus.");
-      return;
-    }
-
-    var obj_path = shell.application.get_dbus_object_path();
-    try {
-      conn.register_object(@"$obj_path/window/$id", (FlurrDBus.Shell) this);
-    } catch (Error err) {
-      critical(err.message);
-    }
+    connect_window_dbus(shell, conn, (FlurrDBus.Shell) this);
   }
 
   // DBus

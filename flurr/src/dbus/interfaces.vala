@@ -1,11 +1,4 @@
 namespace FlurrDBus {
-public interface Service : Object {
-  public void own_name(string dest) {
-    Bus.own_name(BusType.SESSION, dest, BusNameOwnerFlags.NONE, on_dbus_connect);
-  }
-  protected abstract void on_dbus_connect(DBusConnection conn);
-}
-
 [DBus(name = "io.flurr.Application")]
 public interface Application : Object {
   public abstract void toggle_window(string name) throws DBusError, IOError;

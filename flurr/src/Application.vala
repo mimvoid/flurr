@@ -11,9 +11,7 @@ public class Flurr.Application : Gtk.Application {
     var app_dbus = new FlurrDBus.ApplicationService(this);
     app_dbus.own_name(application_id);
 
-    foreach (var win in get_windows()) {
-      window_added_dbus(win);
-    }
+    get_windows().foreach(window_added_dbus);
     window_added.connect(window_added_dbus);
 
     var display = Gdk.Display.get_default();
@@ -32,6 +30,14 @@ public class Flurr.Application : Gtk.Application {
       }
     }
     return null;
+  }
+
+  public string[] get_window_names() {
+    var names = new string[0];
+    foreach (var win in get_windows()) {
+      names += win.name;
+    }
+    return names;
   }
 
   public void toggle_window(string name) throws IOError {

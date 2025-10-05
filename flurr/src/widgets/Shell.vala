@@ -1,10 +1,5 @@
 namespace Flurr {
 public class Shell : Gtk.ApplicationWindow {
-  public new string name {
-    get { return base.name; }
-    set { base.name = value; }
-  }
-
   public string namespace {
     get { return GtkLayerShell.get_namespace(this); }
     set { GtkLayerShell.set_namespace(this, value); }

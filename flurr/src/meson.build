@@ -3,6 +3,7 @@ sources = files(
     'widgets/property_types.vala',
     'widgets/Shell.vala',
     'widgets/PinShell.vala',
+    'dbus/utils.vala',
     'dbus/interfaces.vala',
     'dbus/ApplicationService.vala',
     'dbus/ShellService.vala',

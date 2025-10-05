@@ -27,13 +27,9 @@ public class PinShell : Shell {
     anchor = Anchor.TOP | Anchor.LEFT;
     child = overlay;
 
-    notify["unlocked"].connect((self) => {
-      var w = (PinShell) self;
-      if (w.unlocked) {
-        add_css_class("unlocked");
-      } else {
-        remove_css_class("unlocked");
-      }
+    notify["unlocked"].connect(() => {
+      if (unlocked) add_css_class("unlocked");
+      else remove_css_class("unlocked");
     });
 
     add_action_entries({

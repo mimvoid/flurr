@@ -2,6 +2,9 @@ namespace FlurrDBus {
 [DBus(name = "io.flurr.Application")]
 public interface Application : Object {
   public abstract void toggle_window(string name) throws DBusError, IOError;
+  public abstract void show_window(string name) throws DBusError, IOError;
+  public abstract void hide_window(string name) throws DBusError, IOError;
+
   public abstract string[] list_window_names() throws DBusError, IOError;
   public abstract uint[] list_window_ids() throws DBusError, IOError;
   public abstract ObjectPath[] list_window_paths() throws DBusError, IOError;

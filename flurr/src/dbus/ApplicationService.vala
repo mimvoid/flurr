@@ -18,6 +18,12 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
   public void toggle_window(string name) throws DBusError, IOError {
     app.toggle_window(name);
   }
+  public void show_window(string name) throws DBusError, IOError {
+    app.show_window(name);
+  }
+  public void hide_window(string name) throws DBusError, IOError {
+    app.hide_window(name);
+  }
 
   public string[] list_window_names() throws DBusError, IOError {
     return app.get_window_names();

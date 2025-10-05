@@ -40,12 +40,23 @@ public class Flurr.Application : Gtk.Application {
     return names;
   }
 
-  public void toggle_window(string name) throws IOError {
+  private Gtk.Window check_window_name(string name) throws IOError {
     var window = get_window_by_name(name);
     if (window == null) {
       throw new IOError.FAILED(@"Could not find a window named \"$name\"");
     }
+    return window;
+  }
+
+  public void toggle_window(string name) throws IOError {
+    var window = check_window_name(name);
     window.visible = !window.visible;
+  }
+  public void show_window(string name) throws IOError {
+    (check_window_name(name)).visible = true;
+  }
+  public void hide_window(string name) throws IOError {
+    (check_window_name(name)).visible = false;
   }
 
   private void window_added_dbus(Gtk.Window window) {

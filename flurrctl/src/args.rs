@@ -19,6 +19,8 @@ pub enum Commands {
     Show(WindowCommand),
     /// Make a window invisible
     Hide(WindowCommand),
+    /// Print registered Flurr instances
+    Instances,
 }
 
 #[derive(Args)]

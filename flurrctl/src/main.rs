@@ -7,13 +7,42 @@ use args::{Commands, WindowCommand};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = args::Cli::parse();
-    let instance = args.instance;
 
     match &args.subcommand {
-        Commands::Toggle(win) => toggle_window(instance.as_str(), &win),
-        Commands::Show(win) => show_window(instance.as_str(), &win),
-        Commands::Hide(win) => hide_window(instance.as_str(), &win),
-    }?;
+        Commands::Toggle(win) => toggle_window(args.instance.as_str(), &win)?,
+        Commands::Show(win) => show_window(args.instance.as_str(), &win)?,
+        Commands::Hide(win) => hide_window(args.instance.as_str(), &win)?,
+        Commands::Instances => list_instances()?,
+    };
+
+    Ok(())
+}
+
+fn list_instances() -> dbus::Result<()> {
+    let conn = Connection::new_session()?;
+    let proxy = conn.with_proxy(
+        "org.freedesktop.DBus",
+        "/org/freedesktop/DBus",
+        Duration::from_millis(5000),
+    );
+    let (names,): (Vec<String>,) = proxy.method_call("org.freedesktop.DBus", "ListNames", ())?;
+
+    let instances: Vec<String> = names
+        .iter()
+        .filter_map(|name| {
+            if let Some(instance) = name.strip_prefix("io.flurr.") {
+                Some(String::from(instance))
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    if instances.is_empty() {
+        println!("No Flurr instances found");
+    } else {
+        println!("{}", instances.join("\n"));
+    }
 
     Ok(())
 }

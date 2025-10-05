@@ -11,10 +11,6 @@ public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object
 
   // DBus
 
-  public string name {
-    owned get { return shell.name; }
-    set { shell.name = value; }
-  }
   public string namespace {
     owned get { return shell.namespace; }
     set { shell.namespace = value; }
@@ -56,15 +52,5 @@ public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object
   public int margin_left {
     get { return shell.margin_left; }
     set { shell.margin_left = value; }
-  }
-
-  public void show() throws DBusError, IOError {
-    shell.visible = true;
-  }
-  public void hide() throws DBusError, IOError {
-    shell.visible = false;
-  }
-  public void toggle() throws DBusError, IOError {
-    shell.visible = !shell.visible;
   }
 }

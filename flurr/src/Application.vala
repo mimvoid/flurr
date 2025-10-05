@@ -60,6 +60,12 @@ public class Flurr.Application : Gtk.Application {
   }
 
   private void window_added_dbus(Gtk.Window window) {
+    if (!(window is Gtk.ApplicationWindow))
+      return;
+
+    var window_service = new FlurrDBus.WindowService((Gtk.ApplicationWindow) window);
+    window_service.own_name(application_id);
+
     if (!(window is Flurr.Shell))
       return;
 

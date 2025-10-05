@@ -6,6 +6,7 @@ sources = files(
     'dbus/utils.vala',
     'dbus/interfaces.vala',
     'dbus/ApplicationService.vala',
+    'dbus/WindowService.vala',
     'dbus/ShellService.vala',
     'dbus/PinShellService.vala',
 )

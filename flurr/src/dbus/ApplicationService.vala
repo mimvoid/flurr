@@ -1,5 +1,4 @@
 public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Service, Object {
-  public const string OBJECT_PATH = FlurrDBus.BASE_OBJECT_PATH + "/Application";
   public Flurr.Application app { get; construct; }
 
   public ApplicationService(Flurr.Application app) {
@@ -7,8 +6,9 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
   }
 
   protected void on_dbus_connect(GLib.DBusConnection conn) {
+    var obj_path = app.get_dbus_object_path();
     try {
-      conn.register_object(OBJECT_PATH, (FlurrDBus.Application) this);
+      conn.register_object(obj_path, (FlurrDBus.Application) this);
     } catch (Error err) {
       critical(err.message);
     }
@@ -54,7 +54,7 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
 
       var id = ((Gtk.ApplicationWindow) win).get_id();
       if (id != 0) {
-        paths += new ObjectPath(@"$(FlurrDBus.BASE_OBJECT_PATH)/windows/$id");
+        paths += new ObjectPath(app.get_dbus_object_path() + @"/window/$id");
       }
     }
 

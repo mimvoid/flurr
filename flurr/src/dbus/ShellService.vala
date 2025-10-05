@@ -12,10 +12,9 @@ public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object
       return;
     }
 
+    var obj_path = shell.application.get_dbus_object_path();
     try {
-      conn.register_object(
-        @"$(FlurrDBus.BASE_WINDOW_OBJECT_PATH)/$id", (FlurrDBus.Shell) this
-      );
+      conn.register_object(@"$obj_path/window/$id", (FlurrDBus.Shell) this);
     } catch (Error err) {
       critical(err.message);
     }

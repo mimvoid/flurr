@@ -1,7 +1,4 @@
 namespace FlurrDBus {
-public const string BASE_OBJECT_PATH = "/io/flurr/FlurrService0";
-public const string BASE_WINDOW_OBJECT_PATH = BASE_OBJECT_PATH + "/window";
-
 public interface Service : Object {
   public void own_name(string dest) {
     Bus.own_name(BusType.SESSION, dest, BusNameOwnerFlags.NONE, on_dbus_connect);

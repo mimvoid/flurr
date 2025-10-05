@@ -13,10 +13,9 @@ public class PinShellService : PinShell, Service, Object {
       return;
     }
 
+    var obj_path = shell.application.get_dbus_object_path();
     try {
-      conn.register_object(
-        @"$(BASE_WINDOW_OBJECT_PATH)/$id", (FlurrDBus.PinShell) this
-      );
+      conn.register_object(@"$obj_path/window/$id", (FlurrDBus.PinShell) this);
     } catch (Error err) {
       critical(err.message);
     }

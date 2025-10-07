@@ -1,0 +1,16 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+                      "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="io.flurr.Shell">
+    <property type="s" name="Namespace" access="readwrite"/>
+    <property type="i" name="Layer" access="readwrite"/>
+    <property type="i" name="KeyboardMode" access="readwrite"/>
+    <property type="u" name="Anchor" access="readwrite"/>
+    <property type="i" name="ZIndex" access="readwrite"/>
+    <property type="b" name="AutoExclusiveZone" access="readwrite"/>
+    <property type="i" name="MarginTop" access="readwrite"/>
+    <property type="i" name="MarginRight" access="readwrite"/>
+    <property type="i" name="MarginBottom" access="readwrite"/>
+    <property type="i" name="MarginLeft" access="readwrite"/>
+  </interface>
+</node>

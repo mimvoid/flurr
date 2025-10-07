@@ -1,0 +1,21 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+                      "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="io.flurr.Application">
+    <method name="GetWindowPath">
+      <arg type="s" name="window_name" direction="in"/>
+      <arg type="o" name="result" direction="out" />
+    </method>
+    <method name="ListWindowNames">
+      <arg type="as" name="result" direction="out"/>
+    </method>
+    <method name="ListWindowIds">
+      <arg type="au" name="result" direction="out"/>
+    </method>
+    <method name="ListWindowPaths">
+      <arg type="ao" name="result" direction="out"/>
+    </method>
+    <method name="Quit">
+    </method>
+  </interface>
+</node>

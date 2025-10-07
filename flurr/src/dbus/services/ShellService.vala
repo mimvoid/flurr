@@ -11,10 +11,7 @@ public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object
 
   // DBus
 
-  public string namespace {
-    owned get { return shell.namespace; }
-    set { shell.namespace = value; }
-  }
+  public string namespace { owned get { return shell.namespace; } }
 
   public Flurr.Layer layer {
     get { return shell.layer; }

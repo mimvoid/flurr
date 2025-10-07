@@ -15,14 +15,22 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
 
   // DBus
 
-  public void toggle_window(string name) throws DBusError, IOError {
-    app.toggle_window(name);
-  }
-  public void show_window(string name) throws DBusError, IOError {
-    app.show_window(name);
-  }
-  public void hide_window(string name) throws DBusError, IOError {
-    app.hide_window(name);
+  public ObjectPath get_window_path(string window_name) throws DBusError, IOError {
+    var win = app.get_window_by_name(window_name);
+    if (win == null) {
+      throw new IOError.FAILED(@"Could not find a window named \"$window_name\"");
+    }
+
+    if (!(win is Gtk.ApplicationWindow)) {
+      throw new IOError.FAILED(
+        @"Window \"$window_name\" is not a Gtk.ApplicationWindow, does not have a known object path"
+      );
+    }
+
+    var obj_path_base = make_object_path(app) + "/window/";
+    return new ObjectPath(
+      obj_path_base + ((Gtk.ApplicationWindow) win).get_id().to_string()
+    );
   }
 
   public string[] list_window_names() throws DBusError, IOError {

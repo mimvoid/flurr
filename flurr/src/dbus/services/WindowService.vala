@@ -11,17 +11,12 @@ public class FlurrDBus.WindowService : FlurrDBus.Window, FlurrDBus.Service, Obje
 
   // DBus
 
-  public string name {
-    owned get { return window.name; }
-    set { window.name = value; }
+  public string name { owned get { return window.name; } }
+  public bool visible {
+    get { return window.visible; }
+    set { window.visible = value; }
   }
 
-  public void show() throws DBusError, IOError {
-    window.visible = true;
-  }
-  public void hide() throws DBusError, IOError {
-    window.visible = false;
-  }
   public void toggle() throws DBusError, IOError {
     window.visible = !window.visible;
   }

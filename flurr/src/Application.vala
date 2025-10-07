@@ -52,10 +52,4 @@ public class Flurr.Application : Gtk.Application {
     var window = check_window_name(name);
     window.visible = !window.visible;
   }
-  public void show_window(string name) throws IOError {
-    (check_window_name(name)).visible = true;
-  }
-  public void hide_window(string name) throws IOError {
-    (check_window_name(name)).visible = false;
-  }
 }

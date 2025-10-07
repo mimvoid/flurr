@@ -1,7 +1,9 @@
 namespace FlurrDBus {
 public interface Service : Object {
   public void own_name(string dest) {
-    Bus.own_name(BusType.SESSION, dest, BusNameOwnerFlags.NONE, on_dbus_connect);
+    Bus.own_name(
+      BusType.SESSION, dest, BusNameOwnerFlags.NONE, on_dbus_connect
+    );
   }
   protected abstract void on_dbus_connect(DBusConnection conn);
 }

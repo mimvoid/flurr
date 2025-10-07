@@ -1,4 +1,6 @@
 public class Flurr.Application : Gtk.Application {
+  private bool enable_dbus = true;
+
   public Application() {
     Object(application_id: "io.flurr.Flurr");
   }
@@ -8,11 +10,9 @@ public class Flurr.Application : Gtk.Application {
   }
 
   protected override void activate() {
-    var app_dbus = new FlurrDBus.ApplicationService(this);
-    app_dbus.own_name(application_id);
-
-    get_windows().foreach(window_added_dbus);
-    window_added.connect(window_added_dbus);
+    if (enable_dbus) {
+      FlurrDBus.register(this);
+    }
 
     var display = Gdk.Display.get_default();
     if (display == null)
@@ -57,24 +57,5 @@ public class Flurr.Application : Gtk.Application {
   }
   public void hide_window(string name) throws IOError {
     (check_window_name(name)).visible = false;
-  }
-
-  private void window_added_dbus(Gtk.Window window) {
-    if (!(window is Gtk.ApplicationWindow))
-      return;
-
-    var window_service = new FlurrDBus.WindowService((Gtk.ApplicationWindow) window);
-    window_service.own_name(application_id);
-
-    if (!(window is Flurr.Shell))
-      return;
-
-    var shell_service = new FlurrDBus.ShellService((Flurr.Shell) window);
-    shell_service.own_name(application_id);
-
-    if (window is Flurr.PinShell) {
-      var pin_shell_service = new FlurrDBus.PinShellService((Flurr.PinShell) window);
-      pin_shell_service.own_name(application_id);
-    }
   }
 }

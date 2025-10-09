@@ -1,5 +1,8 @@
 use clap::Parser;
 use dbus::blocking::Connection;
+use std::process::ExitCode;
+
+mod error;
 
 mod args;
 use args::Commands;
@@ -7,7 +10,7 @@ use args::Commands;
 mod window;
 use window::{hide_window, show_window, toggle_window};
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> ExitCode {
     let args = args::Cli::parse();
 
     env_logger::Builder::new()
@@ -17,16 +20,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     log::info!("Connecting to DBus");
-    let conn = Connection::new_session()?;
-
-    match &args.subcommand {
-        Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), &win)?,
-        Commands::Show(win) => show_window(&conn, args.instance.as_str(), &win)?,
-        Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), &win)?,
-        Commands::Instances => list_instances(&conn)?,
+    let Ok(conn) = Connection::new_session() else {
+        log::error!("Failed to connect to DBus");
+        return ExitCode::FAILURE;
     };
 
-    Ok(())
+    let res = match &args.subcommand {
+        Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), &win),
+        Commands::Show(win) => show_window(&conn, args.instance.as_str(), &win),
+        Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), &win),
+        Commands::Instances => list_instances(&conn),
+    };
+
+    if let Err(dbus_err) = res {
+        match error::FlurrctlError::new(args.instance, &dbus_err) {
+            Some(err) => log::error!("{err}"),
+            None => log::error!("{dbus_err}")
+        };
+
+        return ExitCode::FAILURE;
+    }
+
+    ExitCode::SUCCESS
 }
 
 fn list_instances(conn: &Connection) -> dbus::Result<()> {

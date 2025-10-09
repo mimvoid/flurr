@@ -7,8 +7,6 @@ use args::Commands;
 mod window;
 use window::{toggle_window, show_window, hide_window};
 
-const TIMEOUT: std::time::Duration = std::time::Duration::from_millis(5000);
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = args::Cli::parse();
 
@@ -27,7 +25,7 @@ fn list_instances() -> dbus::Result<()> {
     let proxy = conn.with_proxy(
         "org.freedesktop.DBus",
         "/org/freedesktop/DBus",
-        TIMEOUT,
+        std::time::Duration::from_millis(5000),
     );
     let (names,): (Vec<String>,) = proxy.method_call("org.freedesktop.DBus", "ListNames", ())?;
 

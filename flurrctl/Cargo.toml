@@ -7,3 +7,5 @@ edition = "2024"
 flurr-dbus = { path = "../flurr-dbus" }
 clap = { version = "4.5", features = ["derive"] }
 dbus = "0.9.9"
+log = "0.4.28"
+env_logger = { version = "0.11.8", features = ["auto-color"], default-features = false }

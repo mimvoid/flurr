@@ -3,12 +3,13 @@ use dbus::blocking::Connection;
 use flurr_dbus::{Application, Window};
 
 macro_rules! with_window_methods {
-    ($name: ident, $method: expr) => {
-        pub fn $name(instance: &str, opts: &WindowCommand) -> dbus::Result<()> {
-            let conn = Connection::new_session()?;
+    ($name: ident, $method: expr, $info_msg: expr) => {
+        pub fn $name(conn: &Connection, instance: &str, opts: &WindowCommand) -> dbus::Result<()> {
+            log::info!("Finding window");
             let window_path = get_window_path(&conn, instance, opts)?;
-
             let window = Window::with_path(&conn, instance, window_path);
+
+            log::info!($info_msg);
             $method(&window)?;
 
             Ok(())
@@ -16,9 +17,17 @@ macro_rules! with_window_methods {
     };
 }
 
-with_window_methods!(toggle_window, Window::toggle);
-with_window_methods!(show_window, (|proxy| Window::set_visible(proxy, true)));
-with_window_methods!(hide_window, (|proxy| Window::set_visible(proxy, false)));
+with_window_methods!(toggle_window, Window::toggle, "Toggling window");
+with_window_methods!(
+    show_window,
+    (|proxy| Window::set_visible(proxy, true)),
+    "Showing window"
+);
+with_window_methods!(
+    hide_window,
+    (|proxy| Window::set_visible(proxy, false)),
+    "Hiding window"
+);
 
 fn get_window_path<'a>(
     conn: &'a Connection,

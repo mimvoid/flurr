@@ -7,6 +7,9 @@ public enum Anchor {
   RIGHT,
 }
 
+/**
+ * Reexport of GtkLayerShell.Layer.
+ */
 public enum Layer {
   BACKGROUND = GtkLayerShell.Layer.BACKGROUND,
   BOTTOM = GtkLayerShell.Layer.BOTTOM,
@@ -14,6 +17,9 @@ public enum Layer {
   OVERLAY = GtkLayerShell.Layer.OVERLAY,
 }
 
+/**
+ * Reexport of GtkLayerShell.KeyboardMode.
+ */
 public enum KeyboardMode {
   NONE = GtkLayerShell.KeyboardMode.NONE,
   EXCLUSIVE = GtkLayerShell.KeyboardMode.EXCLUSIVE,

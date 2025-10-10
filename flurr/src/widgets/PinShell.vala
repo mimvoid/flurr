@@ -1,11 +1,21 @@
-namespace Flurr {
-public class PinShell : Shell {
+/**
+ * A special Shell for transparent floating windows that can be dragged and repositioned,
+ * similar to Rainmeter widgets or Plasmoids.
+ *
+ * Its margins act as its position relative to the edges it is anchored to. By default, it's
+ * anchored to the top and left edge, so the top and left margins can be set to position it.
+ */
+public class Flurr.PinShell : Shell {
+  /**
+   * Whether the window can be dragged and repositioned.
+   */
   public bool unlocked { get; set; }
 
   private Gtk.MenuButton _menu_button = new Gtk.MenuButton() {
     visible = false
   };
 
+  // TODO: Make any child of the window be the overlay's child
   public Gtk.Overlay overlay {
     get;
     default = new Gtk.Overlay() {
@@ -23,8 +33,8 @@ public class PinShell : Shell {
   construct {
     add_css_class("pin-shell");
     remove_css_class("background");
-    layer = Layer.BOTTOM;
-    anchor = Anchor.TOP | Anchor.LEFT;
+    layer = Flurr.Layer.BOTTOM;
+    anchor = Flurr.Anchor.TOP | Flurr.Anchor.LEFT;
     child = overlay;
 
     notify["unlocked"].connect(() => {
@@ -97,5 +107,4 @@ public class PinShell : Shell {
 
     ((Gtk.Widget) this).add_controller(drag);
   }
-}
 }

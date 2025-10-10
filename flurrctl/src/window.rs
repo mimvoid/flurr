@@ -2,6 +2,8 @@ use crate::{DBusError, Error, args::WindowCommand};
 use dbus::blocking::Connection;
 use flurr_dbus::{Application, Window};
 
+/// Helper function to execute a given method on a window, log relevant information,
+/// and process any errors.
 fn window_method<F>(
     conn: &Connection,
     instance: &str,
@@ -45,6 +47,9 @@ with_window_method!(toggle_window, "Toggling window", |w| w.toggle());
 with_window_method!(show_window, "Showing window", |w| w.set_visible(true));
 with_window_method!(hide_window, "Hiding window", |w| w.set_visible(false));
 
+/// Get a window's DBus object path from a name or id.
+///
+/// If an id is given, the window may or may not exist.
 fn get_window_path<'a>(
     conn: &'a Connection,
     instance: &str,
@@ -66,5 +71,5 @@ fn get_window_path<'a>(
         };
     }
 
-    unreachable!()
+    unreachable!("Clap ensures either a name or an id is provided")
 }

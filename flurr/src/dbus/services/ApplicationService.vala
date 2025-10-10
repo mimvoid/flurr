@@ -1,3 +1,6 @@
+/**
+ * DBus object to wrap and expose a Flurr application's methods to DBus.
+ */
 public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Service, Object {
   public weak Flurr.Application app { get; construct; }
 

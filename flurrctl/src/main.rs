@@ -42,6 +42,7 @@ fn main() -> ExitCode {
     ExitCode::SUCCESS
 }
 
+/// Finds all DBus service names and prints any that begin with "io.flurr."
 fn list_instances(conn: &Connection) -> Result<()> {
     let proxy = conn.with_proxy(
         "org.freedesktop.DBus",

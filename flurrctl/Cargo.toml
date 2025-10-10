@@ -2,6 +2,10 @@
 name = "flurrctl"
 version = "0.1.0"
 license = "MPL-2.0"
+description = "CLI to interact with Flurr instances"
+keywords = ["cli", "terminal", "client"]
+categories = ["command-line-utilities"]
+repository = "https://github.com/mimvoid/flurr"
 edition = "2024"
 
 [dependencies]

@@ -2,6 +2,10 @@
 name = "flurr-dbus"
 version = "0.1.0"
 license = "MPL-2.0"
+description = "DBus bindings for Flurr"
+keywords = ["api"]
+categories = ["api-bindings"]
+repository = "https://github.com/mimvoid/flurr"
 edition = "2024"
 
 [dependencies]

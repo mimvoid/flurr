@@ -3,6 +3,7 @@ use dbus::blocking::Connection;
 use std::process::ExitCode;
 
 mod error;
+use error::{DBusError, Error, Result};
 
 mod args;
 use args::Commands;
@@ -32,19 +33,15 @@ fn main() -> ExitCode {
         Commands::Instances => list_instances(&conn),
     };
 
-    if let Err(dbus_err) = res {
-        match error::FlurrctlError::new(args.instance, &dbus_err) {
-            Some(err) => log::error!("{err}"),
-            None => log::error!("{dbus_err}")
-        };
-
+    if let Err(err) = res {
+        log::error!("{}", err);
         return ExitCode::FAILURE;
     }
 
     ExitCode::SUCCESS
 }
 
-fn list_instances(conn: &Connection) -> dbus::Result<()> {
+fn list_instances(conn: &Connection) -> Result<()> {
     let proxy = conn.with_proxy(
         "org.freedesktop.DBus",
         "/org/freedesktop/DBus",

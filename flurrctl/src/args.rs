@@ -60,4 +60,3 @@ impl Into<log::LevelFilter> for Verbosity {
         }
     }
 }
-

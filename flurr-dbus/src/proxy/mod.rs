@@ -4,18 +4,18 @@ mod shell;
 mod window;
 
 pub use application::Application;
-pub use window::Window;
-pub use shell::Shell;
 pub use pin_shell::PinShell;
+pub use shell::Shell;
+pub use window::Window;
 
-const TIMEOUT: std::time::Duration = std::time::Duration::from_millis(5000);
+const TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 fn make_dest(instance_name: &str) -> String {
-    "io.flurr.".to_owned() + instance_name
+    ["io.flurr.", instance_name].concat()
 }
 
 fn make_object_path(instance_name: &str) -> String {
-    "/io/flurr/".to_owned() + instance_name
+    ["/io/flurr/", instance_name].concat()
 }
 
 macro_rules! dbus_default_interface {

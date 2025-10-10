@@ -1,4 +1,4 @@
-use super::{TIMEOUT, dbus_default_interface, make_dest, make_object_path};
+use super::{dbus_default_interface, make_dest, make_object_path, TIMEOUT};
 use dbus::blocking::{Connection, Proxy};
 
 pub struct Application<'a, 'b> {

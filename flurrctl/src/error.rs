@@ -44,7 +44,7 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::ServiceUnknown(instance) => {
-                write!(f, "Couldn't find the instance \"{}\"", instance)
+                write!(f, r#"Couldn't find the instance "{}""#, instance)
             }
             Error::WindowError {
                 name,
@@ -54,7 +54,7 @@ impl fmt::Display for Error {
                 f,
                 "Failed to call window{}{}{}",
                 name.as_ref()
-                    .map(|n| format!(" \"{n}\""))
+                    .map(|n| [" \"", n, "\""].concat())
                     .as_deref()
                     .unwrap_or_default(),
                 path.rsplit_once('/')
@@ -63,7 +63,7 @@ impl fmt::Display for Error {
                     .unwrap_or_default(),
                 message
                     .as_ref()
-                    .map(|m| format!(": {}", m))
+                    .map(|m| [": ", m].concat())
                     .as_deref()
                     .unwrap_or_default()
             ),

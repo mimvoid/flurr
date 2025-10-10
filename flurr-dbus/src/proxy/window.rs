@@ -1,6 +1,6 @@
 use dbus::blocking::{Connection, Proxy};
 
-use super::{TIMEOUT, dbus_default_interface, make_dest};
+use super::{dbus_default_interface, make_dest, TIMEOUT};
 use crate::make_window_path;
 
 pub struct Window<'a, 'b> {

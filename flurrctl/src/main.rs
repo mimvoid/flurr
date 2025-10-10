@@ -45,7 +45,7 @@ fn list_instances(conn: &Connection) -> Result<()> {
     let proxy = conn.with_proxy(
         "org.freedesktop.DBus",
         "/org/freedesktop/DBus",
-        std::time::Duration::from_millis(5000),
+        std::time::Duration::from_secs(5),
     );
 
     log::info!("Querying org.freedesktop.DBus for instance names");
@@ -53,7 +53,7 @@ fn list_instances(conn: &Connection) -> Result<()> {
 
     let instances: Vec<String> = names
         .iter()
-        .filter_map(|name| name.strip_prefix("io.flurr.").map(str::to_owned))
+        .filter_map(|name| name.strip_prefix("io.flurr.").map(String::from))
         .collect();
 
     log::info!("Found {} Flurr instances", instances.len());

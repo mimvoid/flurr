@@ -60,7 +60,10 @@ public class Flurr.Application : Gtk.Application {
   public string[] get_window_names() {
     var names = new string[0];
     foreach (var win in get_windows()) {
-      names += win.name;
+      var name = win.name;
+      if (name != "") {
+        names += win.name;
+      }
     }
     return names;
   }

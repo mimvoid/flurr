@@ -4,6 +4,7 @@ public static int main(string[] args) {
   app.activate.connect(() => {
     var pin = new Flurr.PinShell(app) {
       title = "Example window",
+      name = "pin_example",
     };
 
     var pin_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 2);

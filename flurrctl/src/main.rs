@@ -1,5 +1,6 @@
 use clap::Parser;
 use dbus::blocking::Connection;
+use std::io::{Write, stdout};
 use std::process::ExitCode;
 
 mod error;
@@ -48,18 +49,22 @@ fn list_instances(conn: &Connection) -> Result<()> {
         std::time::Duration::from_secs(5),
     );
 
-    log::info!("Querying org.freedesktop.DBus for instance names");
+    log::info!("Querying org.freedesktop.DBus for instances");
     let (names,): (Vec<String>,) = proxy.method_call("org.freedesktop.DBus", "ListNames", ())?;
 
-    let instances: Vec<String> = names
+    let instances = names
         .iter()
-        .filter_map(|name| name.strip_prefix("io.flurr.").map(String::from))
-        .collect();
+        .filter_map(|name| name.strip_prefix("io.flurr."));
 
-    log::info!("Found {} Flurr instances", instances.len());
-    if !instances.is_empty() {
-        println!("{}", instances.join("\n"));
+    let mut count: u8 = 0; // if you even have 20+ Flurr instances running, I'd be concerned
+    let mut lock = stdout().lock();
+
+    for instance in instances {
+        let _ = writeln!(lock, "{}", instance);
+        count += 1;
     }
+
+    log::info!("Found {} Flurr instances", count);
 
     Ok(())
 }

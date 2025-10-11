@@ -4,7 +4,7 @@ use clap::{Args, Parser, Subcommand};
 #[command(version, about, long_about = None)]
 pub struct Cli {
     /// Name of the Flurr instance
-    #[arg(short, long, default_value_t = String::from("Flurr"))]
+    #[arg(short, long, global = true, default_value = "Flurr")]
     pub instance: String,
 
     #[command(flatten)]
@@ -30,7 +30,6 @@ pub enum Commands {
 #[group(required = true, multiple = false)]
 pub struct WindowCommand {
     /// The window name
-    #[arg(short, long)]
     pub name: Option<String>,
 
     /// The application window id
@@ -41,11 +40,11 @@ pub struct WindowCommand {
 #[derive(Args)]
 pub struct Verbosity {
     /// Silence all logs
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long, default_value_t = false, global = true)]
     pub quiet: bool,
 
     /// Enable verbose logging
-    #[arg(long, default_value_t = false)]
+    #[arg(short, long, default_value_t = false, global = true)]
     pub verbose: bool,
 }
 

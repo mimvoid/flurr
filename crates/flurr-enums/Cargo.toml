@@ -1,0 +1,10 @@
+[package]
+name = "flurr-enums"
+version = "0.1.0"
+license = "MPL-2.0"
+description = "Rust bindings for Flurr enums"
+repository = "https://github.com/mimvoid/flurr"
+edition = "2024"
+
+[dependencies]
+bitflags = "2.9.4"

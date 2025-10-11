@@ -145,6 +145,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "flurr-enums"
+version = "0.1.0"
+dependencies = [
+ "bitflags",
+]
+
+[[package]]
 name = "flurrctl"
 version = "0.1.0"
 dependencies = [

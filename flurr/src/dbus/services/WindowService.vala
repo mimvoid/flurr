@@ -17,7 +17,7 @@ public class FlurrDBus.WindowService : FlurrDBus.Window, FlurrDBus.Service, Obje
     set { window.visible = value; }
   }
 
-  public void toggle() throws DBusError, IOError {
+  public async void toggle() throws DBusError, IOError {
     window.visible = !window.visible;
   }
 }

@@ -18,7 +18,7 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
 
   // DBus
 
-  public ObjectPath get_window_path(string window_name) throws DBusError, IOError {
+  public async ObjectPath get_window_path(string window_name) throws DBusError, IOError {
     var win = app.get_window_by_name(window_name);
     if (win == null) {
       throw new IOError.FAILED(@"Could not find a window named \"$window_name\"");
@@ -36,11 +36,11 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
     );
   }
 
-  public string[] list_window_names() throws DBusError, IOError {
+  public async string[] list_window_names() throws DBusError, IOError {
     return app.get_window_names();
   }
 
-  public uint[] list_window_ids() throws DBusError, IOError {
+  public async uint[] list_window_ids() throws DBusError, IOError {
     var ids = new uint[0];
 
     foreach (var win in app.get_windows()) {
@@ -52,9 +52,9 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
     return ids;
   }
 
-  public ObjectPath[] list_window_paths() throws DBusError, IOError {
+  public async ObjectPath[] list_window_paths() throws DBusError, IOError {
     var obj_path_base = make_object_path(app) + "/window/";
-    var ids = list_window_ids();
+    var ids = yield list_window_ids();
     var paths = new ObjectPath[ids.length];
 
     for (uint i = 0; i < ids.length; i++) {

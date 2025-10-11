@@ -64,10 +64,7 @@ fn get_window_path<'a>(
 
         return match app.get_window_path(name) {
             Ok(path) => Ok(path),
-            Err(e) => Err(match DBusError::from(&e) {
-                DBusError::ServiceUnknown => Error::ServiceUnknown(instance.into()),
-                _ => Error::DBus(e),
-            }),
+            Err(e) => Err(Error::parse_dbus_name(e, instance)),
         };
     }
 

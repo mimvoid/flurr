@@ -68,6 +68,14 @@ impl fmt::Display for Error {
     }
 }
 
+impl Error {
+    pub fn parse_dbus_name(err: dbus::Error, instance: &str) -> Self {
+        match DBusError::from(&err) {
+            DBusError::ServiceUnknown => Error::ServiceUnknown(instance.into()),
+            _ => Error::DBus(err),
+        }
+    }
+}
 impl From<dbus::Error> for Error {
     fn from(value: dbus::Error) -> Self {
         Error::DBus(value)

@@ -24,6 +24,8 @@ pub enum Commands {
     Hide(WindowCommand),
     /// Print registered Flurr instances
     Instances,
+    /// Quit an instance
+    Quit,
 }
 
 #[derive(Args)]

@@ -9,6 +9,7 @@ mod args;
 use args::Commands;
 
 mod cmds;
+pub use cmds::app::quit;
 pub use cmds::instances::list_instances;
 pub use cmds::window::{hide_window, show_window, toggle_window};
 
@@ -31,6 +32,7 @@ fn main() -> ExitCode {
         Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), &win),
         Commands::Show(win) => show_window(&conn, args.instance.as_str(), &win),
         Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), &win),
+        Commands::Quit => quit(&conn, args.instance.as_str()),
         Commands::Instances => list_instances(&conn),
     };
 

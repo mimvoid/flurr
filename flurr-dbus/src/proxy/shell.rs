@@ -1,6 +1,8 @@
 use crate::Window;
 
 pub trait Shell {
+    fn get_all(&self) -> dbus::Result<dbus::arg::PropMap>;
+
     fn namespace(&self) -> dbus::Result<String>;
 
     fn layer(&self) -> dbus::Result<i32>;
@@ -41,6 +43,8 @@ mod private {
 }
 
 impl<'a, 'b> Shell for Window<'a, 'b> {
+    super::dbus_get_all!("io.flurr.Shell");
+
     fn namespace(&self) -> dbus::Result<String> {
         private::Shell::get(self, "Namespace")
     }

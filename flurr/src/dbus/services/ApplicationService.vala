@@ -26,7 +26,7 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
 
     if (!(win is Gtk.ApplicationWindow)) {
       throw new IOError.FAILED(
-        @"Window \"$window_name\" is not a Gtk.ApplicationWindow, does not have a known object path"
+        @"Window \"$window_name\" is not a Gtk.ApplicationWindow and has no object path"
       );
     }
 

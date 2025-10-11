@@ -9,4 +9,5 @@ repository = "https://github.com/mimvoid/flurr"
 edition = "2024"
 
 [dependencies]
+bitflags = "2.9.4"
 dbus = "0.9.9"

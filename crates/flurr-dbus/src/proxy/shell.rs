@@ -1,7 +1,21 @@
 use crate::Window;
 
+#[derive(Debug, Default)]
+pub struct ShellProps {
+    pub namespace: String,
+    pub layer: i8,
+    pub keyboard_mode: i8,
+    pub anchor: u8,
+    pub zindex: i32,
+    pub auto_exclusive_zone: bool,
+    pub margin_top: i32,
+    pub margin_right: i32,
+    pub margin_bottom: i32,
+    pub margin_left: i32,
+}
+
 pub trait Shell: hidden::Shell {
-    fn get_all(&self) -> dbus::Result<dbus::arg::PropMap>;
+    fn get_all(&self) -> dbus::Result<ShellProps>;
 
     fn namespace(&self) -> dbus::Result<String>;
 
@@ -43,7 +57,44 @@ impl<'a, 'b> hidden::Shell for Window<'a, 'b> {
 }
 
 impl<'a, 'b> Shell for Window<'a, 'b> {
-    super::dbus_get_all!("io.flurr.Shell");
+    fn get_all(&self) -> dbus::Result<ShellProps> {
+        use dbus::blocking::stdintf::org_freedesktop_dbus::Properties;
+        let props = self.proxy.get_all("io.flurr.Shell")?;
+
+        macro_rules! parse {
+            ($var: ident, $prop_name: expr, $and_then: expr) => {
+                let Some($var) = props.get($prop_name).and_then($and_then) else {
+                    return Err(dbus::Error::new_failed(
+                        r#"Couldn't parse "$prop_name\ for "io.flurr.Shell""#,
+                    ));
+                };
+            };
+        }
+
+        parse!(namespace, "Namespace", |n| n.0.as_str());
+        parse!(layer, "Layer", |l| l.0.as_i64());
+        parse!(keymode, "KeyboardMode", |l| l.0.as_i64());
+        parse!(anchor, "Anchor", |a| a.0.as_u64());
+        parse!(zindex, "ZIndex", |z| z.0.as_i64());
+        parse!(auto_ex, "AutoExclusiveZone", |a| a.0.as_i64());
+        parse!(mtop, "MarginTop", |m| m.0.as_i64());
+        parse!(mright, "MarginRight", |m| m.0.as_i64());
+        parse!(mbottom, "MarginBottom", |m| m.0.as_i64());
+        parse!(mleft, "MarginLeft", |m| m.0.as_i64());
+
+        Ok(ShellProps {
+            namespace: namespace.to_owned(),
+            layer: layer as i8,
+            keyboard_mode: keymode as i8,
+            anchor: anchor as u8,
+            zindex: zindex as i32,
+            auto_exclusive_zone: auto_ex != 0,
+            margin_top: mtop as i32,
+            margin_right: mright as i32,
+            margin_bottom: mbottom as i32,
+            margin_left: mleft as i32,
+        })
+    }
 
     fn namespace(&self) -> dbus::Result<String> {
         hidden::Shell::get(self, "Namespace")

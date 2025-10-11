@@ -5,7 +5,7 @@ mod window;
 
 pub use application::Application;
 pub use pin_shell::PinShell;
-pub use shell::Shell;
+pub use shell::{Shell, ShellProps};
 pub use window::Window;
 
 const TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
@@ -58,26 +58,6 @@ macro_rules! dbus_default_interface {
     };
 }
 pub(super) use dbus_default_interface;
-
-macro_rules! dbus_pub_get_all {
-    ($name: expr) => {
-        pub fn get_all(&self) -> dbus::Result<dbus::arg::PropMap> {
-            use dbus::blocking::stdintf::org_freedesktop_dbus::Properties;
-            self.proxy.get_all($name)
-        }
-    }
-}
-pub(super) use dbus_pub_get_all;
-
-macro_rules! dbus_get_all {
-    ($name: expr) => {
-        fn get_all(&self) -> dbus::Result<dbus::arg::PropMap> {
-            use dbus::blocking::stdintf::org_freedesktop_dbus::Properties;
-            self.proxy.get_all($name)
-        }
-    }
-}
-pub(super) use dbus_get_all;
 
 macro_rules! dbus_default_trait {
     () => {

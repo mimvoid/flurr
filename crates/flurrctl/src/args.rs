@@ -22,6 +22,8 @@ pub enum Commands {
     Show(WindowCommand),
     /// Make a window invisible
     Hide(WindowCommand),
+    /// Print all windows and their properties
+    Windows,
     /// Print registered Flurr instances
     Instances,
     /// Quit an instance

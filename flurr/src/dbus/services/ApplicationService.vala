@@ -18,10 +18,10 @@ public class FlurrDBus.ApplicationService : FlurrDBus.Application, FlurrDBus.Ser
 
   // DBus
 
-  public async ObjectPath get_window_path(string window_name) throws DBusError, IOError {
+  public async ObjectPath get_window_path(string window_name) throws FlurrError, DBusError, IOError {
     var win = app.get_window_by_name(window_name);
     if (win == null) {
-      throw new IOError.FAILED(@"Could not find a window named \"$window_name\"");
+      throw new FlurrError.WINDOW_NOT_FOUND(@"Could not find a window named \"$window_name\"");
     }
 
     if (!(win is Gtk.ApplicationWindow)) {

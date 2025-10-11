@@ -59,8 +59,10 @@ impl fmt::Display for Error {
                     .unwrap_or_default()
             ),
             Error::DBus(dbus_err) => match dbus_err.name() {
-                Some(name) => write!(f, "{}: {}", name, dbus_err),
-                None => write!(f, "{}", dbus_err),
+                Some(name) if !name.starts_with("io.flurr.Error") => {
+                    write!(f, "{}: {}", name, dbus_err)
+                }
+                _ => write!(f, "{}", dbus_err),
             },
         }
     }

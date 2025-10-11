@@ -1,7 +1,14 @@
 namespace FlurrDBus {
+[DBus(name = "io.flurr.Error")]
+public errordomain FlurrError {
+  [DBus(name = "WindowNotFound")]
+  WINDOW_NOT_FOUND,
+}
+
 [DBus(name = "io.flurr.Application")]
 public interface Application : Object {
-  public abstract async ObjectPath get_window_path(string window_name) throws DBusError, IOError;
+  public abstract async ObjectPath get_window_path(string window_name)
+    throws FlurrError, DBusError, IOError;
   public abstract async string[] list_window_names() throws DBusError, IOError;
   public abstract async uint[] list_window_ids() throws DBusError, IOError;
   public abstract async ObjectPath[] list_window_paths() throws DBusError, IOError;

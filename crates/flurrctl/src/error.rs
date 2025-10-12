@@ -1,23 +1,29 @@
-use std::fmt;
-
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 /// The main error used throughout flurrctl to keep track of relevant information and print them in
 /// a user-friendly way
 pub enum Error {
     /// For when the DBus service cannot be found
+    #[error("Couldn't find the instance \"{0}\"")]
     ServiceUnknown(String),
 
     /// For window method errors with a known DBus object path
+    #[error("Failed to call window{}{}{}", .name.as_ref()
+                    .map_or_else(String::default, |n| format!(" \"{n}\"")),
+                .path.rsplit_once('/')
+                    .map_or_else(String::default, |p| format!(" (id {})", p.1)),
+                .dbus_error.message()
+                    .map_or_else(String::default, |m| format!(": {m}")))]
     WindowError {
         name: Option<String>,
         path: dbus::Path<'static>,
-        message: Option<String>,
+        dbus_error: dbus::Error,
     },
 
     /// Wrapper for dbus-rs errors
-    DBus(dbus::Error),
+    #[error("{}{}", .0.name().map_or_else(String::default, |n| format!("{n}: ")), .0)]
+    DBus(#[from] dbus::Error),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -29,56 +35,14 @@ pub enum DBusError {
     UnknownMethod = 2,
 }
 
-impl std::error::Error for Error {}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Error::ServiceUnknown(instance) => {
-                write!(f, r#"Couldn't find the instance "{}""#, instance)
-            }
-            Error::WindowError {
-                name,
-                path,
-                message,
-            } => write!(
-                f,
-                "Failed to call window{}{}{}",
-                name.as_ref()
-                    .map(|n| [" \"", n, "\""].concat())
-                    .as_deref()
-                    .unwrap_or_default(),
-                path.rsplit_once('/')
-                    .map(|p| format!(" (id {})", p.1))
-                    .as_deref()
-                    .unwrap_or_default(),
-                message
-                    .as_ref()
-                    .map(|m| [": ", m].concat())
-                    .as_deref()
-                    .unwrap_or_default()
-            ),
-            Error::DBus(dbus_err) => match dbus_err.name() {
-                Some(name) if !name.starts_with("io.flurr.Error") => {
-                    write!(f, "{}: {}", name, dbus_err)
-                }
-                _ => write!(f, "{}", dbus_err),
-            },
-        }
-    }
-}
-
 impl Error {
     pub fn parse_dbus_name(err: dbus::Error, instance: &str) -> Self {
-        match DBusError::from(&err) {
-            DBusError::ServiceUnknown => Error::ServiceUnknown(instance.into()),
+        match err.name() {
+            Some("org.freedesktop.DBus.Error.ServiceUnknown") => {
+                Error::ServiceUnknown(instance.into())
+            }
             _ => Error::DBus(err),
         }
-    }
-}
-impl From<dbus::Error> for Error {
-    fn from(value: dbus::Error) -> Self {
-        Error::DBus(value)
     }
 }
 

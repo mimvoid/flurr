@@ -26,7 +26,7 @@ where
             DBusError::UnknownMethod => Error::WindowError {
                 name: opts.name.clone(),
                 path: window_path,
-                message: err.message().map(String::from),
+                dbus_error: err,
             },
             _ => Error::DBus(err),
         })

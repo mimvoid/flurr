@@ -39,7 +39,7 @@ fn main() -> ExitCode {
     };
 
     if let Err(err) = res {
-        log::error!("{}", err);
+        log::error!("{err}");
         return ExitCode::FAILURE;
     }
 

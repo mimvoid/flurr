@@ -18,7 +18,7 @@ where
     let window_path = get_window_path(&conn, instance, opts)?;
     let window = Window::with_path(&conn, instance, window_path.clone());
 
-    log::info!("{}", info_msg);
+    log::info!("{info_msg}");
 
     if let Err(err) = f(&window) {
         Err(match DBusError::from(&err) {

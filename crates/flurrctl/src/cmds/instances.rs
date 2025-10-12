@@ -16,15 +16,15 @@ pub fn list_instances(conn: &Connection) -> crate::Result<()> {
         .iter()
         .filter_map(|name| name.strip_prefix("io.flurr."));
 
-    let mut count: u8 = 0; // if you even have 20+ Flurr instances running, I'd be concerned
+    let mut count = 0u8; // if you even have 20+ Flurr instances running, I'd be concerned
     let mut lock = stdout().lock();
 
     for instance in instances {
-        let _ = writeln!(lock, "{}", instance);
+        let _ = writeln!(lock, "{instance}");
         count += 1;
     }
 
-    log::info!("Found {} Flurr instances", count);
+    log::info!("Found {count} Flurr instances");
 
     Ok(())
 }

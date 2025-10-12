@@ -23,11 +23,11 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
 
         if let Ok(props) = Shell::get_all(&window) {
             if let Some(prop_str) = display_shell_props(&props) {
-                let _ = writeln!(lock, "{}", prop_str);
+                let _ = writeln!(lock, "{prop_str}");
             }
         }
         if let Ok(unlocked) = PinShell::unlocked(&window) {
-            let _ = writeln!(lock, "  unlocked: {}", unlocked);
+            let _ = writeln!(lock, "  unlocked: {unlocked}");
         }
 
         let _ = writeln!(lock, "");

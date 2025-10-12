@@ -8,7 +8,7 @@ pub fn quit(conn: &Connection, instance: &str) -> crate::Result<()> {
 
     match app.quit() {
         Ok(()) => {
-            log::info!("Successfully quit instance \"{}\"", instance);
+            log::info!("Successfully quit instance \"{instance}\"");
             Ok(())
         }
         Err(err) => Err(Error::parse_dbus_name(err, instance)),

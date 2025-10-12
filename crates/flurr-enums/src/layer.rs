@@ -1,10 +1,26 @@
 #[repr(u8)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[cfg_attr(
+    feature = "strum",
+    derive(
+        strum::EnumString,
+        strum::FromRepr,
+        strum::AsRefStr,
+        strum::IntoStaticStr
+    )
+)]
+#[cfg_attr(feature = "strum", strum(ascii_case_insensitive))]
 pub enum Layer {
     Background,
     Bottom,
     Top,
     Overlay,
+}
+
+impl std::fmt::Display for Layer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self) // Same as Debug
+    }
 }
 
 impl TryFrom<i32> for Layer {
@@ -19,4 +35,3 @@ impl TryFrom<i32> for Layer {
         }
     }
 }
-

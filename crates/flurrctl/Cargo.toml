@@ -10,6 +10,7 @@ edition = "2024"
 
 [dependencies]
 flurr-dbus = { path = "../flurr-dbus" }
+flurr-enums = { path = "../flurr-enums" }
 clap = { version = "4.5", features = ["derive"] }
 dbus = "0.9.9"
 log = "0.4.28"

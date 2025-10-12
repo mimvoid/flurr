@@ -160,6 +160,7 @@ dependencies = [
  "dbus",
  "env_logger",
  "flurr-dbus",
+ "flurr-enums",
  "log",
 ]
 

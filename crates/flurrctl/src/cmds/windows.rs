@@ -22,7 +22,9 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
         }
 
         if let Ok(props) = Shell::get_all(&window) {
-            let _ = writeln!(lock, "{}", display_shell_props(&props));
+            if let Some(prop_str) = display_shell_props(&props) {
+                let _ = writeln!(lock, "{}", prop_str);
+            }
         }
         if let Ok(unlocked) = PinShell::unlocked(&window) {
             let _ = writeln!(lock, "  unlocked: {}", unlocked);
@@ -34,20 +36,35 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
     Ok(())
 }
 
-fn display_shell_props(props: &ShellProps) -> String {
-    format!(
+fn display_shell_props(props: &ShellProps) -> Option<String> {
+    let Ok(layer) = flurr_enums::Layer::try_from(props.layer as u8) else {
+        log::warn!("Couldn't parse layer value: {}", props.layer);
+        return None;
+    };
+
+    let Ok(keyboard_mode) = flurr_enums::KeyboardMode::try_from(props.keyboard_mode as u8) else {
+        log::warn!("Couldn't parse keyboard_mode value: {}", props.keyboard_mode);
+        return None;
+    };
+
+    let Ok(anchor) = flurr_enums::Anchor::try_from(props.anchor) else {
+        log::warn!("Couldn't parse anchor value: {}", props.anchor);
+        return None;
+    };
+
+    Some(format!(
         "  namespace: \"{}\"\n  layer: {}\n  keyboard_mode: {}\n  anchor: {}\n  auto_exclusive_zone: {}\n  z_index: {}\n  margin_top: {}\n  margin_right: {}\n  margin_bottom: {}\n  margin_left: {}",
         props.namespace,
-        props.layer,
-        props.keyboard_mode,
-        props.anchor,
+        layer,
+        keyboard_mode,
+        anchor,
         props.auto_exclusive_zone,
         props.zindex,
         props.margin_top,
         props.margin_right,
         props.margin_left,
         props.margin_bottom
-    )
+    ))
 }
 
 fn list_window_paths(conn: &Connection, instance: &str) -> crate::Result<Vec<dbus::Path<'static>>> {

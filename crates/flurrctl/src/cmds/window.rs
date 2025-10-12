@@ -20,19 +20,16 @@ where
 
     log::info!("{info_msg}");
 
-    if let Err(err) = f(&window) {
-        Err(match DBusError::from(&err) {
-            DBusError::ServiceUnknown => Error::ServiceUnknown(instance.to_owned()),
-            DBusError::UnknownMethod => Error::WindowError {
-                name: opts.name.clone(),
-                path: window_path,
-                dbus_error: err,
-            },
-            _ => Error::DBus(err),
-        })
-    } else {
-        Ok(())
-    }
+    f(&window).map_err(|err| match DBusError::from(&err) {
+        DBusError::ServiceUnknown => Error::ServiceUnknown(instance.to_owned()),
+        DBusError::UnknownMethod => Error::WindowError {
+            name: opts.name.clone(),
+            path: window_path,
+            dbus_error: err,
+        },
+        _ => Error::DBus(err),
+    })?;
+    Ok(())
 }
 
 macro_rules! with_window_method {
@@ -61,11 +58,9 @@ fn get_window_path<'a>(
 
     if let Some(name) = opts.name.as_deref() {
         let app = Application::new(conn, instance);
-
-        return match app.get_window_path(name) {
-            Ok(path) => Ok(path),
-            Err(e) => Err(Error::parse_dbus_name(e, instance)),
-        };
+        return app
+            .get_window_path(name)
+            .map_err(|err| Error::parse_dbus_name(err, instance));
     }
 
     unreachable!("Clap ensures either a name or an id is provided")

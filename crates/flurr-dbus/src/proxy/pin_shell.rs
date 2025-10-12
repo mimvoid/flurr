@@ -15,10 +15,10 @@ impl<'a, 'b> hidden::PinShell for Window<'a, 'b> {
 }
 
 impl<'a, 'b> PinShell for Window<'a, 'b> {
-    fn unlocked(&self) -> Result<bool, dbus::Error> {
+    fn unlocked(&self) -> dbus::Result<bool> {
         hidden::PinShell::get(self, "Unlocked")
     }
-    fn set_unlocked(&self, value: bool) -> Result<(), dbus::Error> {
+    fn set_unlocked(&self, value: bool) -> dbus::Result<()> {
         hidden::PinShell::set(self, "Unlocked", value)
     }
 }

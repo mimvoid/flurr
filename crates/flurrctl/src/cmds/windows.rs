@@ -69,8 +69,6 @@ fn display_shell_props(props: &ShellProps) -> Option<String> {
 
 fn list_window_paths(conn: &Connection, instance: &str) -> crate::Result<Vec<dbus::Path<'static>>> {
     let app = Application::new(conn, instance);
-    match app.list_window_paths() {
-        Ok(paths) => Ok(paths),
-        Err(err) => Err(Error::parse_dbus_name(err, instance)),
-    }
+    app.list_window_paths()
+        .map_err(|err| Error::parse_dbus_name(err, instance))
 }

@@ -1,4 +1,6 @@
 bitflags::bitflags! {
+    #[repr(transparent)]
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
     pub struct Anchor: u8 {
         const TOP = 0x01;
         const RIGHT = 0x02;

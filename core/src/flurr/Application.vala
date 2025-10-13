@@ -27,7 +27,7 @@ public class Flurr.Application : Gtk.Application {
 
   protected override void activate() {
     if (enable_dbus) {
-      FlurrDBus.register(this);
+      Flurr.register_dbus(this);
     }
 
     var display = Gdk.Display.get_default();

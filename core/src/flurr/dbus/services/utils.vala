@@ -1,5 +1,5 @@
-namespace FlurrDBus {
-public interface Service : Object {
+namespace Flurr {
+public interface DBusService : Object {
   public void own_name(string dest) {
     Bus.own_name(
       BusType.SESSION, dest, BusNameOwnerFlags.NONE, on_dbus_connect

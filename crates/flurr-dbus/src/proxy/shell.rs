@@ -3,14 +3,14 @@ use crate::Window;
 pub trait Shell: hidden::Shell {
     fn namespace(&self) -> dbus::Result<String>;
 
-    fn layer(&self) -> dbus::Result<i32>;
-    fn set_layer(&self, value: i32) -> dbus::Result<()>;
+    fn layer(&self) -> dbus::Result<u8>;
+    fn set_layer(&self, value: u8) -> dbus::Result<()>;
 
-    fn keyboard_mode(&self) -> dbus::Result<i32>;
-    fn set_keyboard_mode(&self, value: i32) -> dbus::Result<()>;
+    fn keyboard_mode(&self) -> dbus::Result<u8>;
+    fn set_keyboard_mode(&self, value: u8) -> dbus::Result<()>;
 
-    fn anchor(&self) -> dbus::Result<u32>;
-    fn set_anchor(&self, value: u32) -> dbus::Result<()>;
+    fn anchor(&self) -> dbus::Result<u8>;
+    fn set_anchor(&self, value: u8) -> dbus::Result<()>;
 
     fn zindex(&self) -> dbus::Result<i32>;
     fn set_zindex(&self, value: i32) -> dbus::Result<()>;
@@ -45,24 +45,24 @@ impl<'a, 'b> Shell for Window<'a, 'b> {
         hidden::Shell::get(self, "Namespace")
     }
 
-    fn layer(&self) -> dbus::Result<i32> {
+    fn layer(&self) -> dbus::Result<u8> {
         hidden::Shell::get(self, "Layer")
     }
-    fn set_layer(&self, value: i32) -> dbus::Result<()> {
+    fn set_layer(&self, value: u8) -> dbus::Result<()> {
         hidden::Shell::set(self, "Layer", value)
     }
 
-    fn keyboard_mode(&self) -> dbus::Result<i32> {
+    fn keyboard_mode(&self) -> dbus::Result<u8> {
         hidden::Shell::get(self, "KeyboardMode")
     }
-    fn set_keyboard_mode(&self, value: i32) -> dbus::Result<()> {
+    fn set_keyboard_mode(&self, value: u8) -> dbus::Result<()> {
         hidden::Shell::set(self, "KeyboardMode", value)
     }
 
-    fn anchor(&self) -> dbus::Result<u32> {
+    fn anchor(&self) -> dbus::Result<u8> {
         hidden::Shell::get(self, "Anchor")
     }
-    fn set_anchor(&self, value: u32) -> dbus::Result<()> {
+    fn set_anchor(&self, value: u8) -> dbus::Result<()> {
         hidden::Shell::set(self, "Anchor", value)
     }
 

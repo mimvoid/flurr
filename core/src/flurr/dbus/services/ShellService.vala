@@ -1,4 +1,4 @@
-public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object {
+public class Flurr.ShellService : FlurrDBus.Shell, Flurr.DBusService, Object {
   public weak Flurr.Shell shell { get; construct; }
 
   public ShellService(Flurr.Shell shell) {
@@ -13,17 +13,26 @@ public class FlurrDBus.ShellService : FlurrDBus.Shell, FlurrDBus.Service, Object
 
   public string namespace { owned get { return shell.namespace; } }
 
-  public Flurr.Layer layer {
+  public uint8 layer {
     get { return shell.layer; }
-    set { shell.layer = value; }
+    set {
+      if (Flurr.Layer.is_valid(value))
+        shell.layer = (Flurr.Layer) value;
+    }
   }
-  public Flurr.KeyboardMode keyboard_mode {
+  public uint8 keyboard_mode {
     get { return shell.keyboard_mode; }
-    set { shell.keyboard_mode = value; }
+    set {
+      if (Flurr.KeyboardMode.is_valid(value))
+        shell.keyboard_mode = (Flurr.KeyboardMode) value;
+    }
   }
-  public Flurr.Anchor anchor {
+  public uint8 anchor {
     get { return shell.anchor; }
-    set { shell.anchor = value; }
+    set {
+      if (Flurr.Anchor.is_valid(value))
+        shell.anchor = (Flurr.Anchor) value;
+    }
   }
   public int z_index {
     get { return shell.z_index; }

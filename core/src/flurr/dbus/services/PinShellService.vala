@@ -1,5 +1,5 @@
-namespace FlurrDBus {
-public class PinShellService : PinShell, Service, Object {
+namespace Flurr {
+public class PinShellService : FlurrDBus.PinShell, Flurr.DBusService, Object {
   public weak Flurr.PinShell shell { get; construct; }
 
   public PinShellService(Flurr.PinShell shell) {
@@ -7,7 +7,7 @@ public class PinShellService : PinShell, Service, Object {
   }
 
   protected void on_dbus_connect(GLib.DBusConnection conn) {
-    connect_window_dbus(shell, conn, (PinShell) this);
+    connect_window_dbus(shell, conn, (FlurrDBus.PinShell) this);
   }
 
   // DBus

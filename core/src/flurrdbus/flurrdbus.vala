@@ -1,14 +1,16 @@
 namespace FlurrDBus {
 [DBus(name = "io.flurr.Error")]
-public errordomain FlurrError {
+public errordomain Error {
   [DBus(name = "WindowNotFound")]
   WINDOW_NOT_FOUND,
+  [DBus(name = "InvalidValue")]
+  INVALID_VALUE
 }
 
 [DBus(name = "io.flurr.Application")]
 public interface Application : Object {
   public abstract async ObjectPath get_window_path(string window_name)
-    throws FlurrError, DBusError, IOError;
+    throws Error, DBusError, IOError;
   public abstract async string[] list_window_names() throws DBusError, IOError;
   public abstract async uint[] list_window_ids() throws DBusError, IOError;
   public abstract async ObjectPath[] list_window_paths() throws DBusError, IOError;
@@ -26,9 +28,9 @@ public interface Window : Object {
 public interface Shell : Object {
   public abstract string namespace { owned get; }
 
-  public abstract Flurr.Layer layer { get; set; }
-  public abstract Flurr.KeyboardMode keyboard_mode { get; set; }
-  public abstract Flurr.Anchor anchor { get; set; }
+  public abstract uint8 layer { get; set; }
+  public abstract uint8 keyboard_mode { get; set; }
+  public abstract uint8 anchor { get; set; }
   public abstract int z_index { get; set; }
   public abstract bool auto_exclusive_zone { get; set; }
 

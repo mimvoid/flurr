@@ -4,7 +4,15 @@ public enum Anchor {
   TOP,
   BOTTOM,
   LEFT,
-  RIGHT,
+  RIGHT;
+
+  /**
+   * Check if only known bits for Flurr.Anchor are set.
+   */
+  public static bool is_valid(uint8 bits) {
+    var stripped = bits & ~TOP & ~BOTTOM & ~LEFT & ~RIGHT;
+    return stripped == 0;
+  }
 }
 
 /**
@@ -14,7 +22,14 @@ public enum Layer {
   BACKGROUND = GtkLayerShell.Layer.BACKGROUND,
   BOTTOM = GtkLayerShell.Layer.BOTTOM,
   TOP = GtkLayerShell.Layer.TOP,
-  OVERLAY = GtkLayerShell.Layer.OVERLAY,
+  OVERLAY = GtkLayerShell.Layer.OVERLAY;
+
+  /**
+   * Checks if the given value matches a member of Layer.
+   */
+  public static bool is_valid(uint8 num) {
+    return (num == BACKGROUND || num == BOTTOM || num == TOP || num == OVERLAY);
+  }
 }
 
 /**
@@ -23,7 +38,14 @@ public enum Layer {
 public enum KeyboardMode {
   NONE = GtkLayerShell.KeyboardMode.NONE,
   EXCLUSIVE = GtkLayerShell.KeyboardMode.EXCLUSIVE,
-  ON_DEMAND = GtkLayerShell.KeyboardMode.ON_DEMAND,
+  ON_DEMAND = GtkLayerShell.KeyboardMode.ON_DEMAND;
+
+  /**
+   * Checks if the given value matches a member of KeyboardMode.
+   */
+  public static bool is_valid(uint8 num) {
+    return (num == NONE || num == EXCLUSIVE || num == ON_DEMAND);
+  }
 }
 
 public struct Edges {

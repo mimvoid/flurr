@@ -1,4 +1,4 @@
-public class FlurrDBus.WindowService : FlurrDBus.Window, FlurrDBus.Service, Object {
+public class Flurr.WindowService : FlurrDBus.Window, Flurr.DBusService, Object {
   public weak Gtk.ApplicationWindow window { get; construct; }
 
   public WindowService(Gtk.ApplicationWindow window) {

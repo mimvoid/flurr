@@ -4,8 +4,8 @@ use dbus::blocking::stdintf::org_freedesktop_dbus::Properties as BlockingPropert
 #[derive(Debug, Default)]
 pub struct ShellProps {
     pub namespace: String,
-    pub layer: i8,
-    pub keyboard_mode: i8,
+    pub layer: u8,
+    pub keyboard_mode: u8,
     pub anchor: u8,
     pub zindex: i32,
     pub auto_exclusive_zone: bool,
@@ -41,9 +41,9 @@ impl ShellProps {
 
         Ok(ShellProps {
             namespace: parse!("Namespace", |n| n.0.as_str()).to_owned(),
-            layer: get_cast!("Layer", i32) as i8,
-            keyboard_mode: get_cast!("KeyboardMode", i32) as i8,
-            anchor: get_cast!("Anchor", u32) as u8,
+            layer: get_cast!("Layer", u8),
+            keyboard_mode: get_cast!("KeyboardMode", u8),
+            anchor: get_cast!("Anchor", u8),
             zindex: get_cast!("ZIndex", i32),
             auto_exclusive_zone: get_cast!("AutoExclusiveZone", bool),
             margin_top: get_cast!("MarginTop", i32),

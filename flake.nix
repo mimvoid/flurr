@@ -13,6 +13,7 @@
           name = "Flurr";
 
           packages = with pkgs; [
+            pkg-config
             meson
             ninja
             vala
@@ -20,6 +21,7 @@
             vala-language-server
 
             glib
+            gobject-introspection
             gtk4
             gtk4-layer-shell
           ];

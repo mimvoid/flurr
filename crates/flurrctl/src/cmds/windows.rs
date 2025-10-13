@@ -1,5 +1,5 @@
 use dbus::blocking::Connection;
-use flurr_dbus::{Application, PinShell, Shell, ShellProps, Window};
+use flurr_dbus::{Application, PinShell, Window, props::ShellProps};
 use std::io::{Write, stdout};
 
 use crate::Error;
@@ -21,7 +21,7 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
             let _ = writeln!(lock, "  id: {}", id.1);
         }
 
-        if let Ok(props) = Shell::get_all(&window) {
+        if let Ok(props) = ShellProps::get_blocking(&window.proxy) {
             if let Some(prop_str) = display_shell_props(&props) {
                 let _ = writeln!(lock, "{prop_str}");
             }
@@ -43,7 +43,10 @@ fn display_shell_props(props: &ShellProps) -> Option<String> {
     };
 
     let Ok(keyboard_mode) = flurr_enums::KeyboardMode::try_from(props.keyboard_mode as u8) else {
-        log::warn!("Couldn't parse keyboard_mode value: {}", props.keyboard_mode);
+        log::warn!(
+            "Couldn't parse keyboard_mode value: {}",
+            props.keyboard_mode
+        );
         return None;
     };
 

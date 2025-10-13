@@ -5,7 +5,7 @@ mod window;
 
 pub use application::Application;
 pub use pin_shell::PinShell;
-pub use shell::{Shell, ShellProps};
+pub use shell::Shell;
 pub use window::Window;
 
 const TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);

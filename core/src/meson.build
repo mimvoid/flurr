@@ -4,7 +4,6 @@ sources = files(
     'widgets/Shell.vala',
     'widgets/PinShell.vala',
 )
-sources += resources
 
 subdir('dbus')
 

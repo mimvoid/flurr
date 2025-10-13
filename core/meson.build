@@ -8,12 +8,6 @@ dependencies = [
     dependency('gtk4-layer-shell-0'),
 ]
 
-resources = import('gnome').compile_resources(
-    'flurr_resources',
-    'data/flurr.gresource.xml',
-    source_dir: 'data'
-)
-
 subdir('src')
 
 if get_option('examples')

@@ -35,7 +35,22 @@ public class Flurr.Application : Gtk.Application {
       return;
 
     var css = new Gtk.CssProvider();
-    css.load_from_resource("/io/flurr/Core/style.css");
+    css.load_from_string("
+      .pin-shell {
+        border-radius: 4px;
+        border: 1px solid transparent;
+      }
+      .pin-shell.unlocked {
+        border-color: white;
+      }
+      .pin-shell-buttons {
+        -gtk-icon-size: 12px;
+      }
+      .pin-shell-buttons button,
+      .pin-shell-buttons menubutton {
+        padding: 0;
+      }
+    ");
     Gtk.StyleContext.add_provider_for_display(display, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
 

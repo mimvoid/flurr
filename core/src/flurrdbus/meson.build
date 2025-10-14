@@ -5,7 +5,7 @@ if get_option('introspection')
 
   flurrdbus_lib = shared_library(
     'flurrdbus',
-    files('flurrdbus.vala'),
+    'flurrdbus.vala',
     dependencies: [glib, gobject, gio],
     vala_gir: gir,
     install: true,
@@ -23,7 +23,7 @@ if get_option('introspection')
 else
   flurrdbus_lib = shared_library(
     'flurrdbus',
-    files('flurrdbus.vala'),
+    'flurrdbus.vala',
     dependencies: [glib, gobject, gio],
     install: true,
     install_dir: [true, true, true]

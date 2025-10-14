@@ -7,5 +7,5 @@ gio = dependency('gio-2.0')
 subdir('src')
 
 if get_option('examples')
-    subdir('examples')
+  subdir('examples')
 endif

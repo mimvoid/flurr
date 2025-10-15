@@ -9,6 +9,7 @@ dependencies = [
 
 sources = files(
   'Application.vala',
+  'css.vala',
   'widgets/property_types.vala',
   'widgets/Shell.vala',
   'widgets/PinShell.vala',

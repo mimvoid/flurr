@@ -30,12 +30,7 @@ public class Flurr.Application : Gtk.Application {
       Flurr.register_dbus(this);
     }
 
-    var display = Gdk.Display.get_default();
-    if (display == null)
-      return;
-
-    var css = new Gtk.CssProvider();
-    css.load_from_string("
+    load_css_string("
       .pin-shell {
         border-radius: 4px;
         border: 1px solid transparent;
@@ -50,8 +45,7 @@ public class Flurr.Application : Gtk.Application {
       .pin-shell-buttons menubutton {
         padding: 0;
       }
-    ");
-    Gtk.StyleContext.add_provider_for_display(display, css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    ", Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
 
   /**

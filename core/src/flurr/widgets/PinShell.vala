@@ -24,6 +24,12 @@ public class Flurr.PinShell : Shell {
   private Gtk.MenuButton _menu_button = new Gtk.MenuButton() {
     visible = false
   };
+  private Gtk.Box _button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2) {
+    halign = Gtk.Align.END,
+    valign = Gtk.Align.END,
+    hexpand = true,
+    vexpand = true,
+  };
 
   // TODO: Make any child of the window be the overlay's child
   private Gtk.Overlay overlay = new Gtk.Overlay() {
@@ -53,12 +59,6 @@ public class Flurr.PinShell : Shell {
       { "toggle_lock", () => { unlocked = !unlocked; } },
     }, this);
 
-    var _button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2) {
-      halign = Gtk.Align.END,
-      valign = Gtk.Align.END,
-      hexpand = true,
-      vexpand = true,
-    };
     _button_box.add_css_class("pin-shell-buttons");
     overlay.add_overlay(_button_box);
     overlay.set_measure_overlay(_button_box, false);
@@ -107,16 +107,33 @@ public class Flurr.PinShell : Shell {
   private void _add_gesture_drag() {
     var drag = new Gtk.GestureDrag();
 
+    drag.drag_begin.connect((self, _x, _y) => {
+      var w = (PinShell) self.widget;
+      if (w.unlocked)
+        w.add_css_class("dragging");
+      else
+        self.set_state(Gtk.EventSequenceState.DENIED);
+    });
+
     drag.drag_update.connect((self, offset_x, offset_y) => {
       var w = (PinShell) self.widget;
       if (!w.unlocked)
         return;
 
+      _button_box.set_visible(false);
       self.set_state(Gtk.EventSequenceState.CLAIMED);
 
       var scale = w.get_surface().scale;
       w.margin_top += (int) (scale * offset_y);
       w.margin_left += (int) (scale * offset_x);
+    });
+
+    drag.drag_end.connect((self, _x, _y) => {
+      var w = (PinShell) self.widget;
+      if (w.unlocked) {
+        w.remove_css_class("dragging");
+        w._button_box.set_visible(true);
+      }
     });
 
     ((Gtk.Widget) this).add_controller(drag);

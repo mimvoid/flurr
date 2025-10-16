@@ -35,7 +35,7 @@ public class Flurr.Application : Gtk.Application {
         border-radius: 4px;
         border: 1px solid transparent;
       }
-      .pin-shell.unlocked {
+      .pin-shell.unlocked:not(.dragging) {
         border-color: white;
       }
       .pin-shell-buttons {

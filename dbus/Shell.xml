@@ -3,9 +3,9 @@
 <node>
   <interface name="io.flurr.Shell">
     <property type="s" name="Namespace" access="readwrite"/>
-    <property type="i" name="Layer" access="readwrite"/>
-    <property type="i" name="KeyboardMode" access="readwrite"/>
-    <property type="u" name="Anchor" access="readwrite"/>
+    <property type="y" name="Layer" access="readwrite"/>
+    <property type="y" name="KeyboardMode" access="readwrite"/>
+    <property type="y" name="Anchor" access="readwrite"/>
     <property type="i" name="ZIndex" access="readwrite"/>
     <property type="b" name="AutoExclusiveZone" access="readwrite"/>
     <property type="i" name="MarginTop" access="readwrite"/>

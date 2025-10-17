@@ -8,11 +8,11 @@ use error::{DBusError, Error, Result};
 mod args;
 use args::Commands;
 
-mod cmds;
-pub use cmds::app::quit;
-pub use cmds::instances::list_instances;
-pub use cmds::window::{hide_window, show_window, toggle_window};
-pub use cmds::windows::print_windows;
+mod app;
+mod window;
+
+use app::{list_instances, quit};
+use window::{hide_window, print_windows, show_window, toggle_window};
 
 fn main() -> ExitCode {
     let args = args::Cli::parse();

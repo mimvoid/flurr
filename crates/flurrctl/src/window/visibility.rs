@@ -1,6 +1,6 @@
 use crate::{DBusError, Error, args::WindowCommand};
 use dbus::blocking::Connection;
-use flurr_dbus::{Application, Window};
+use flurr_dbus::Window;
 
 /// Helper function to execute a given method on a window, log relevant information,
 /// and process any errors.
@@ -15,7 +15,7 @@ where
     F: Fn(&Window) -> dbus::Result<()>,
 {
     log::info!("Finding window");
-    let window_path = get_window_path(&conn, instance, opts)?;
+    let window_path = super::get_window_path(&conn, instance, opts)?;
     let window = Window::with_path(&conn, instance, window_path.clone());
 
     log::info!("{info_msg}");
@@ -43,25 +43,3 @@ macro_rules! with_window_method {
 with_window_method!(toggle_window, "Toggling window", |w| w.toggle());
 with_window_method!(show_window, "Showing window", |w| w.set_visible(true));
 with_window_method!(hide_window, "Hiding window", |w| w.set_visible(false));
-
-/// Get a window's DBus object path from a name or id.
-///
-/// If an id is given, the window may or may not exist.
-fn get_window_path<'a>(
-    conn: &'a Connection,
-    instance: &str,
-    opts: &WindowCommand,
-) -> crate::Result<dbus::Path<'static>> {
-    if let Some(id) = opts.id {
-        return Ok(flurr_dbus::make_window_path(instance, &id));
-    }
-
-    if let Some(name) = opts.name.as_deref() {
-        let app = Application::new(conn, instance);
-        return app
-            .get_window_path(name)
-            .map_err(|err| Error::parse_dbus_name(err, instance));
-    }
-
-    unreachable!("Clap ensures either a name or an id is provided")
-}

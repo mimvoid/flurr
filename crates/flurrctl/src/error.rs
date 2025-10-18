@@ -26,7 +26,10 @@ pub enum Error {
 
     /// Wrapper for flurr_dbus PropertyError
     #[error("{0}")]
-    PropertyError(#[from] flurr_dbus::props::PropertyError)
+    PropertyError(#[from] flurr_dbus::props::PropertyError),
+
+    #[error("{0}")]
+    IOError(#[from] std::io::Error)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

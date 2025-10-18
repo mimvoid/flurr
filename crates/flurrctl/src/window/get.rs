@@ -1,5 +1,5 @@
 use dbus::blocking::Connection;
-use flurr_dbus::{Application, Window, props};
+use flurr_dbus::{Application, Window, props, props::ShellProps};
 use std::io::{Write, stdout};
 
 use crate::{Error, args::GetCommand};
@@ -22,69 +22,75 @@ pub fn get_windows(conn: &Connection, instance: &str, opts: &GetCommand) -> crat
     for res in id_props {
         let (id_opt, props) = res?;
 
-        let _ = writeln!(lock, "{}:", props.name);
+        writeln!(lock, "{}:", props.name)?;
         if let Some(id) = id_opt {
-            let _ = writeln!(lock, "  id: {id}");
+            writeln!(lock, "  id: {id}")?;
         }
 
-        let _ = writeln!(lock, "  visible: {}", props.visible);
+        writeln!(lock, "  visible: {}", props.visible)?;
 
         if let Some(shell) = props.shell() {
-            let _ = writeln!(lock, "{}", display_shell_props(shell, opts.raw));
+            display_shell_props(&mut lock, shell, opts.raw)?;
         }
         if let Some(pin_shell) = props.pin_shell() {
-            let _ = writeln!(lock, "  unlocked: {}", pin_shell.unlocked);
+            writeln!(lock, "  unlocked: {}", pin_shell.unlocked)?;
         }
     }
 
     Ok(())
 }
 
-fn display_shell_props(props: &props::ShellProps, raw: bool) -> String {
-    let enum_flags = if raw {
-        format!(
+fn display_shell_props(buf: &mut impl Write, props: &ShellProps, raw: bool) -> crate::Result<()> {
+    writeln!(buf, "  namespace: \"{}\"", props.namespace)?;
+
+    if raw {
+        writeln!(
+            buf,
             "  layer: {}\n  keyboard_mode: {}\n  anchor: {}",
             props.layer, props.keyboard_mode, props.anchor
-        )
+        )?;
     } else {
-        shell_props_pretty(props.layer, props.keyboard_mode, props.anchor)
+        pretty_enums(buf, props.layer, props.keyboard_mode, props.anchor)?;
     };
 
-    format!(
-        "  namespace: \"{}\"\n{enum_flags}\n  auto_exclusive_zone: {}\n  z_index: {}\n  margin_top: {}\n  margin_right: {}\n  margin_bottom: {}\n  margin_left: {}",
-        props.namespace,
+    writeln!(
+        buf,
+        "  auto_exclusive_zone: {}\n  z_index: {}\n  margin_top: {}\n  margin_right: {}\n  margin_bottom: {}\n  margin_left: {}",
         props.auto_exclusive_zone,
         props.zindex,
         props.margin_top,
         props.margin_right,
         props.margin_bottom,
         props.margin_left
-    )
+    )?;
+
+    Ok(())
 }
 
-fn shell_props_pretty(layer_prop: u8, keyboard_mode_prop: u8, anchor_prop: u8) -> String {
-    let layer = match flurr_enums::Layer::try_from(layer_prop) {
-        Ok(l) => l.to_string(),
+fn pretty_enums(buf: &mut impl Write, layer: u8, keyboard: u8, anchor: u8) -> crate::Result<()> {
+    match flurr_enums::Layer::try_from(layer) {
+        Ok(l) => writeln!(buf, "  layer: {l}"),
         _ => {
-            log::warn!("Couldn't parse layer: {layer_prop}");
-            layer_prop.to_string()
+            log::warn!("Couldn't parse layer: {layer}");
+            writeln!(buf, "  layer: {layer}")
         }
-    };
+    }?;
 
-    let keyboard_mode = match flurr_enums::KeyboardMode::try_from(keyboard_mode_prop) {
-        Ok(k) => k.to_string(),
+    match flurr_enums::KeyboardMode::try_from(keyboard) {
+        Ok(k) => writeln!(buf, "  keyboard_mode: {k}"),
         _ => {
-            log::warn!("Couldn't parse keyboard_mode: {keyboard_mode_prop}");
-            keyboard_mode_prop.to_string()
+            log::warn!("Couldn't parse keyboard_mode: {keyboard}");
+            writeln!(buf, "  keyboard_mode: {keyboard}")
         }
-    };
+    }?;
 
-    let anchor = flurr_enums::Anchor::try_from(anchor_prop).unwrap_or_else(|_| {
-        log::warn!("Unsetting unknown bits in anchor: {anchor_prop}");
-        flurr_enums::Anchor::from_bits_truncate(anchor_prop)
+    let anchor = flurr_enums::Anchor::try_from(anchor).unwrap_or_else(|_| {
+        log::warn!("Unsetting unknown bits in anchor: {anchor}");
+        flurr_enums::Anchor::from_bits_truncate(anchor)
     });
+    writeln!(buf, "  anchor: {anchor}")?;
 
-    format!("  layer: {layer}\n  keyboard_mode: {keyboard_mode}\n  anchor: {anchor}")
+    Ok(())
 }
 
 fn get_paths(

@@ -20,7 +20,7 @@ pub fn list_instances(conn: &Connection) -> crate::Result<()> {
     let mut lock = stdout().lock();
 
     for instance in instances {
-        let _ = writeln!(lock, "{instance}");
+        writeln!(lock, "{instance}")?;
         count += 1;
     }
 

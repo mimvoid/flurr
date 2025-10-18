@@ -26,7 +26,8 @@ pub enum Error {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// Non-exhaustive standard DBus error types under the "org.freedesktop.DBus.Error" namespace
+#[non_exhaustive]
+/// Standard DBus error types under the "org.freedesktop.DBus.Error" namespace
 pub enum DBusError {
     /// For any unimplemented or unparseable error
     Unknown = 0,

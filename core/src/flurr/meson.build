@@ -4,21 +4,21 @@ dependencies = [
   gio,
   dependency('gtk4'),
   dependency('gtk4-layer-shell-0'),
-  flurrdbus_dep
+  flurrdbus_dep,
 ]
 
 sources = files(
   'Application.vala',
   'css.vala',
-  'widgets/property_types.vala',
-  'widgets/Shell.vala',
-  'widgets/PinShell.vala',
   'dbus/lib.vala',
-  'dbus/services/utils.vala',
   'dbus/services/ApplicationService.vala',
-  'dbus/services/WindowService.vala',
-  'dbus/services/ShellService.vala',
   'dbus/services/PinShellService.vala',
+  'dbus/services/ShellService.vala',
+  'dbus/services/utils.vala',
+  'dbus/services/WindowService.vala',
+  'widgets/property_types.vala',
+  'widgets/PinShell.vala',
+  'widgets/Shell.vala',
 )
 
 if get_option('introspection')
@@ -31,7 +31,7 @@ if get_option('introspection')
     dependencies: dependencies,
     vala_gir: gir,
     install: true,
-    install_dir: [true, true, true, true]
+    install_dir: [true, true, true, true],
   )
 
   custom_target(
@@ -45,7 +45,7 @@ if get_option('introspection')
     output: typelib,
     depends: flurr_lib,
     install: true,
-    install_dir: get_option('libdir') / 'girepository-1.0'
+    install_dir: get_option('libdir') / 'girepository-1.0',
   )
 else
   flurr_lib = shared_library(
@@ -53,11 +53,11 @@ else
     sources,
     dependencies: dependencies,
     install: true,
-    install_dir: [true, true, true]
+    install_dir: [true, true, true],
   )
 endif
 
 flurr_dep = declare_dependency(
   include_directories: include_directories('.'),
-  link_with: flurr_lib
+  link_with: flurr_lib,
 )

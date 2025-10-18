@@ -12,7 +12,7 @@ mod app;
 mod window;
 
 use app::{list_instances, quit};
-use window::{hide_window, print_windows, show_window, toggle_window};
+use window::{hide_window, get_windows, show_window, toggle_window};
 
 fn main() -> ExitCode {
     let args = args::Cli::parse();
@@ -33,7 +33,7 @@ fn main() -> ExitCode {
         Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), win.window.as_str()),
         Commands::Show(win) => show_window(&conn, args.instance.as_str(), win.window.as_str()),
         Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), win.window.as_str()),
-        Commands::Windows => print_windows(&conn, args.instance.as_str()),
+        Commands::Get(get_cmd) => get_windows(&conn, args.instance.as_str(), &get_cmd),
         Commands::Quit => quit(&conn, args.instance.as_str()),
         Commands::Instances => list_instances(&conn),
     };

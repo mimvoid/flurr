@@ -22,8 +22,8 @@ pub enum Commands {
     Show(WindowCommand),
     /// Make a window invisible
     Hide(WindowCommand),
-    /// Print all windows and their properties
-    Windows,
+    /// Print windows and their properties
+    Get(GetCommand),
     /// Print registered Flurr instances
     Instances,
     /// Quit an instance
@@ -57,4 +57,14 @@ impl Into<log::LevelFilter> for Verbosity {
             log::LevelFilter::Error
         }
     }
+}
+
+#[derive(Args)]
+pub struct GetCommand {
+    /// The names or ids of the windows to print
+    pub windows: Vec<String>,
+
+    /// Print enums and bitflags as numbers instead of strings
+    #[arg(short, long)]
+    pub raw: bool,
 }

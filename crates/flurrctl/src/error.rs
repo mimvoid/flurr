@@ -23,6 +23,10 @@ pub enum Error {
     /// Wrapper for dbus-rs errors
     #[error("{}{}", .0.name().map_or_else(String::default, |n| format!("{n}: ")), .0)]
     DBus(#[from] dbus::Error),
+
+    /// Wrapper for flurr_dbus PropertyError
+    #[error("{0}")]
+    PropertyError(#[from] flurr_dbus::props::PropertyError)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

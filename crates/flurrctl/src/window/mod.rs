@@ -1,7 +1,7 @@
-mod list;
+mod get;
 mod visibility;
 
-pub use list::print_windows;
+pub use get::get_windows;
 pub use visibility::{hide_window, show_window, toggle_window};
 
 use dbus::blocking::Connection;

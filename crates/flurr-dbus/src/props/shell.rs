@@ -1,5 +1,4 @@
-use super::PropertyError;
-use dbus::blocking::stdintf::org_freedesktop_dbus::Properties as BlockingProperties;
+use super::{BlockingProperties, PropertyError, parse_string};
 
 #[derive(Debug, Default)]
 pub struct ShellProps {
@@ -18,29 +17,18 @@ pub struct ShellProps {
 impl ShellProps {
     pub fn get_blocking(proxy: &impl BlockingProperties) -> Result<Self, PropertyError> {
         let props = proxy.get_all("io.flurr.Shell")?;
-        ShellProps::from_prop_map(&props)
+        Self::from_prop_map(&props)
     }
 
     pub fn from_prop_map(props: &dbus::arg::PropMap) -> Result<Self, PropertyError> {
-        macro_rules! parse {
-            ($prop_name: expr, $and_then: expr) => {
-                props
-                    .get($prop_name)
-                    .and_then($and_then)
-                    .ok_or_else(|| PropertyError::Parse {
-                        interface: "io.flurr.Shell".to_owned(),
-                        name: $prop_name.to_owned(),
-                    })?
-            };
-        }
         macro_rules! get_cast {
             ($prop_name: expr, $type: ty) => {
-                parse!($prop_name, |value| value.0.as_any().downcast_ref::<$type>()).to_owned()
+                super::get_cast!("io.flurr.Shell", props, $prop_name, $type)
             };
         }
 
         Ok(ShellProps {
-            namespace: parse!("Namespace", |n| n.0.as_str()).to_owned(),
+            namespace: parse_string!("io.flurr.Shell", props, "Namespace"),
             layer: get_cast!("Layer", u8),
             keyboard_mode: get_cast!("KeyboardMode", u8),
             anchor: get_cast!("Anchor", u8),

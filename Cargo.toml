@@ -5,5 +5,7 @@ members = [
 ]
 
 [profile.release]
+strip = true
+panic = "abort"
 opt-level = "s" # Optimize for binary size, as DBus messages are the more likely bottleneck
 lto = true # Link time optimization

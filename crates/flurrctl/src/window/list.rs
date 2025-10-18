@@ -11,14 +11,13 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
     for path in paths {
         let window = Window::with_path(conn, instance, path.clone());
 
-        let _ = writeln!(
-            lock,
-            "{}:",
-            window.name().unwrap_or_else(|_| String::from("Window"))
-        );
+        let _ = match window.name() {
+            Ok(name) => writeln!(lock, "{name}:"),
+            _ => writeln!(lock, "Window:"),
+        };
 
-        if let Some(id) = path.rsplit_once('/') {
-            let _ = writeln!(lock, "  id: {}", id.1);
+        if let Some((_, id)) = path.rsplit_once('/') {
+            let _ = writeln!(lock, "  id: {id}");
         }
 
         if let Ok(props) = ShellProps::get_blocking(&window.proxy) {
@@ -37,12 +36,12 @@ pub fn print_windows(conn: &Connection, instance: &str) -> crate::Result<()> {
 }
 
 fn display_shell_props(props: &ShellProps) -> Option<String> {
-    let Ok(layer) = flurr_enums::Layer::try_from(props.layer as u8) else {
+    let Ok(layer) = flurr_enums::Layer::try_from(props.layer) else {
         log::warn!("Couldn't parse layer value: {}", props.layer);
         return None;
     };
 
-    let Ok(keyboard_mode) = flurr_enums::KeyboardMode::try_from(props.keyboard_mode as u8) else {
+    let Ok(keyboard_mode) = flurr_enums::KeyboardMode::try_from(props.keyboard_mode) else {
         log::warn!(
             "Couldn't parse keyboard_mode value: {}",
             props.keyboard_mode

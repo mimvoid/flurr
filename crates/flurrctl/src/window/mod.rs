@@ -12,18 +12,13 @@ use dbus::blocking::Connection;
 fn get_window_path<'a>(
     conn: &'a Connection,
     instance: &str,
-    opts: &crate::args::WindowCommand,
+    window: &str,
 ) -> crate::Result<dbus::Path<'static>> {
-    if let Some(id) = opts.id {
+    if let Ok(id) = window.parse::<u32>() {
         return Ok(flurr_dbus::make_window_path(instance, &id));
     }
 
-    if let Some(name) = opts.name.as_deref() {
-        let app = flurr_dbus::Application::new(conn, instance);
-        return app
-            .get_window_path(name)
-            .map_err(|err| crate::Error::parse_dbus_name(err, instance));
-    }
-
-    unreachable!("Clap ensures either a name or an id is provided")
+    let app = flurr_dbus::Application::new(conn, instance);
+    app.get_window_path(window)
+        .map_err(|err| crate::Error::parse_dbus_name(err, instance))
 }

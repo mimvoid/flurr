@@ -9,14 +9,13 @@ pub enum Error {
     ServiceUnknown(String),
 
     /// For window method errors with a known DBus object path
-    #[error("Failed to call window{}{}{}", .name.as_ref()
-                    .map_or_else(String::default, |n| format!(" \"{n}\"")),
+    #[error("Failed to call window {}{}{}", .name,
                 .path.rsplit_once('/')
                     .map_or_else(String::default, |p| format!(" (id {})", p.1)),
                 .dbus_error.message()
                     .map_or_else(String::default, |m| format!(": {m}")))]
     WindowError {
-        name: Option<String>,
+        name: String,
         path: dbus::Path<'static>,
         dbus_error: dbus::Error,
     },

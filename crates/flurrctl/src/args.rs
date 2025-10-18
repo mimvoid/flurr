@@ -31,14 +31,9 @@ pub enum Commands {
 }
 
 #[derive(Args)]
-#[group(required = true, multiple = false)]
 pub struct WindowCommand {
-    /// The window name
-    pub name: Option<String>,
-
-    /// The application window id
-    #[arg(short = 'I', long)]
-    pub id: Option<u32>,
+    /// The window name, or the id if a number
+    pub window: String,
 }
 
 #[derive(Args)]

@@ -30,9 +30,9 @@ fn main() -> ExitCode {
     };
 
     let res = match &args.subcommand {
-        Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), &win),
-        Commands::Show(win) => show_window(&conn, args.instance.as_str(), &win),
-        Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), &win),
+        Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), win.window.as_str()),
+        Commands::Show(win) => show_window(&conn, args.instance.as_str(), win.window.as_str()),
+        Commands::Hide(win) => hide_window(&conn, args.instance.as_str(), win.window.as_str()),
         Commands::Windows => print_windows(&conn, args.instance.as_str()),
         Commands::Quit => quit(&conn, args.instance.as_str()),
         Commands::Instances => list_instances(&conn),

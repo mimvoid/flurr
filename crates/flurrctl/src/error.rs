@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
@@ -9,11 +11,9 @@ pub enum Error {
     ServiceUnknown(String),
 
     /// For window method errors with a known DBus object path
-    #[error("Failed to call window {}{}{}", .name,
-                .path.rsplit_once('/')
-                    .map_or_else(String::default, |p| format!(" (id {})", p.1)),
-                .dbus_error.message()
-                    .map_or_else(String::default, |m| format!(": {m}")))]
+    #[error("Failed to call window {} (id {}){}", .name,
+                .path.rsplit_once('/').map_or("", |p| p.1),
+                .dbus_error.message().map_or_else(|| Cow::Borrowed(""), |m| Cow::Borrowed(": ") + m))]
     WindowError {
         name: String,
         path: dbus::Path<'static>,
@@ -21,7 +21,7 @@ pub enum Error {
     },
 
     /// Wrapper for dbus-rs errors
-    #[error("{}{}", .0.name().map_or_else(String::default, |n| format!("{n}: ")), .0)]
+    #[error("{}{}", .0.name().map_or_else(|| Cow::Borrowed(""), |n| Cow::Borrowed(n) + ": "), .0)]
     DBus(#[from] dbus::Error),
 
     /// Wrapper for flurr_dbus PropertyError
@@ -29,7 +29,7 @@ pub enum Error {
     PropertyError(#[from] flurr_dbus::props::PropertyError),
 
     #[error("{0}")]
-    IOError(#[from] std::io::Error)
+    IOError(#[from] std::io::Error),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -37,9 +37,9 @@ pub enum Error {
 /// Standard DBus error types under the "org.freedesktop.DBus.Error" namespace
 pub enum DBusError {
     /// For any unimplemented or unparseable error
-    Unknown = 0,
-    ServiceUnknown = 1,
-    UnknownMethod = 2,
+    Unknown,
+    ServiceUnknown,
+    UnknownMethod,
 }
 
 impl Error {

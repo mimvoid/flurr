@@ -9,6 +9,9 @@ pub fn set_window(conn: &Connection, opts: &SetCommand) -> crate::Result<()> {
     let path = super::get_window_path(conn, instance, opts.window.as_str())?;
     let window = Window::with_path(conn, instance, path);
 
+    // Check if the instance is running and the window exists
+    window.ping().map_err(|err| crate::Error::parse_dbus_name(err, instance))?;
+
     if let Some(visible) = opts.visible {
         window.set_visible(visible)?;
     }

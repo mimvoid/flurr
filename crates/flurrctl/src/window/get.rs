@@ -21,7 +21,10 @@ pub fn get_windows(conn: &Connection, opts: &GetCommand) -> crate::Result<()> {
     let mut lock = stdout().lock();
 
     for res in id_props {
-        let (id_opt, props) = res?;
+        let (id_opt, props) = res.map_err(|err| match err {
+            flurr_dbus::props::PropertyError::DBus(e) => Error::parse_dbus_name(e, instance),
+            _ => err.into(),
+        })?;
 
         writeln!(lock, "{}:", props.name)?;
         if let Some(id) = id_opt {
@@ -108,7 +111,7 @@ fn get_paths(
         } else {
             let path = app
                 .get_window_path(window)
-                .map_err(|err| crate::Error::parse_dbus_name(err, instance))?;
+                .map_err(|err| Error::parse_dbus_name(err, instance))?;
             paths.push(path);
         }
     }

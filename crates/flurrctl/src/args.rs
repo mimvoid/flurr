@@ -55,7 +55,7 @@ impl Into<log::LevelFilter> for Verbosity {
         } else if self.verbose {
             log::LevelFilter::Info
         } else {
-            log::LevelFilter::Error
+            log::LevelFilter::Warn
         }
     }
 }

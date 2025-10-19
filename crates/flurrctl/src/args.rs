@@ -76,35 +76,46 @@ pub struct GetCommand {
 
 #[derive(Args)]
 pub struct SetCommand {
-    /// The name or id of the window to set the properties
+    /// Name or id of the window to write to
     pub window: String,
 
     /// Name of the Flurr instance
     #[arg(short, long, default_value = "Flurr")]
     pub instance: String,
 
-    #[arg(long)]
+    /// Whether the window can be seen
+    #[arg(long, hide_possible_values = true)]
     pub visible: Option<bool>,
 
+    /// Shell component layer [ex: BACKGROUND, 3]
     #[arg(long)]
     pub layer: Option<String>,
+    /// Keyboard input sensitivity [ex: ON_DEMAND, 2]
     #[arg(long)]
     pub keyboard_mode: Option<String>,
+    /// Screen edges to anchor to [ex: "TOP | LEFT", 13]
     #[arg(long)]
     pub anchor: Option<String>,
+    /// Shell exclusion zone, overwrites --auto-exclusive-zone
     #[arg(long)]
     pub zindex: Option<i32>,
-    #[arg(long)]
+    /// Automatically exclude the window with margins
+    #[arg(long, value_name = "AUTO_EXCLUDE", hide_possible_values = true)]
     pub auto_exclusive_zone: Option<bool>,
+    /// Margin for top anchor
     #[arg(long)]
     pub margin_top: Option<i32>,
+    /// Margin for right anchor
     #[arg(long)]
     pub margin_right: Option<i32>,
+    /// Margin for bottom anchor
     #[arg(long)]
     pub margin_bottom: Option<i32>,
+    /// Margin for left anchor
     #[arg(long)]
     pub margin_left: Option<i32>,
 
-    #[arg(long)]
+    /// Whether the window can be dragged and moved
+    #[arg(long, hide_possible_values = true)]
     pub unlocked: Option<bool>,
 }

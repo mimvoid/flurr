@@ -1,22 +1,23 @@
-use super::{TIMEOUT, dbus_default_interface, make_dest, make_object_path, ping};
+use super::{ProxyWrapper, TIMEOUT, dbus_default_interface, make_dest, make_object_path};
 use dbus::blocking::{Connection, Proxy};
 
-pub struct Application<'a, 'b> {
-    pub proxy: Proxy<'a, &'b Connection>,
+pub struct Application<'a, 'b>(Proxy<'a, &'b Connection>);
+
+impl<'a, 'b> ProxyWrapper<'a, 'b> for Application<'a, 'b> {
+    fn proxy(&self) -> &Proxy<'a, &'b Connection> {
+        &self.0
+    }
 }
 
 impl<'a, 'b> Application<'a, 'b> {
     dbus_default_interface!("io.flurr.Application");
-    ping!(pub);
 
     pub fn new(connection: &'b Connection, instance_name: &str) -> Self {
-        Self {
-            proxy: connection.with_proxy(
-                make_dest(instance_name),
-                make_object_path(instance_name),
-                TIMEOUT,
-            ),
-        }
+        Self(connection.with_proxy(
+            make_dest(instance_name),
+            make_object_path(instance_name),
+            TIMEOUT,
+        ))
     }
 
     pub fn get_window_path(&self, window_name: &str) -> dbus::Result<dbus::Path<'static>> {

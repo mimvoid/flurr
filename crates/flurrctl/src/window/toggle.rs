@@ -1,6 +1,6 @@
 use crate::{DBusError, Error};
 use dbus::blocking::Connection;
-use flurr_dbus::Window;
+use flurr_dbus::{Window, ProxyWrapper};
 
 /// Helper function to execute a given method on a window, log relevant information,
 /// and process any errors.
@@ -24,7 +24,7 @@ where
         DBusError::ServiceUnknown => Error::ServiceUnknown(instance.to_owned()),
         DBusError::UnknownMethod => Error::WindowError {
             name: window.to_string(),
-            path: window_proxy.proxy.path,
+            path: window_proxy.proxy().path.clone(),
             dbus_error: err,
         },
         _ => Error::DBus(err),

@@ -1,5 +1,5 @@
 use dbus::blocking::Connection;
-use flurr_dbus::{PinShell, Shell, Window};
+use flurr_dbus::{PinShell, Shell, Window, ProxyWrapper};
 use std::str::FromStr;
 
 use crate::args::SetCommand;

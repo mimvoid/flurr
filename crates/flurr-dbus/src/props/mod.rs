@@ -6,6 +6,7 @@ pub use pin_shell::PinShellProps;
 pub use shell::ShellProps;
 pub use window::WindowProps;
 
+use dbus::arg::PropMap;
 use dbus::blocking::stdintf::org_freedesktop_dbus::Properties as BlockingProperties;
 
 #[derive(Debug)]
@@ -33,33 +34,45 @@ impl From<dbus::Error> for PropertyError {
     }
 }
 
-macro_rules! parse {
-    ($iface: expr, $props: expr, $prop_name: expr, $and_then: expr) => {
-        $props
-            .get($prop_name)
-            .and_then($and_then)
-            .ok_or_else(|| PropertyError::Parse {
-                interface: $iface.to_owned(),
-                name: $prop_name.to_owned(),
-            })?
-    };
+fn parse<T, F>(
+    props: &PropMap,
+    prop_name: &str,
+    iface: &str,
+    and_then: F,
+) -> Result<T, PropertyError>
+where
+    F: Fn(&dbus::arg::Variant<Box<dyn dbus::arg::RefArg>>) -> Option<T>,
+{
+    props
+        .get(prop_name)
+        .and_then(and_then)
+        .ok_or_else(|| PropertyError::Parse {
+            interface: iface.to_owned(),
+            name: prop_name.to_owned(),
+        })
 }
-pub(self) use parse;
 
-macro_rules! parse_string {
-    ($iface: expr, $props: expr, $prop_name: expr) => {
-        crate::props::parse!($iface, $props, $prop_name, |s| s.0.as_str()).to_owned()
-    };
+fn parse_string(props: &PropMap, prop_name: &str, iface: &str) -> Result<String, PropertyError> {
+    parse(props, prop_name, iface, |s| s.0.as_str().map(str::to_owned))
 }
-pub(self) use parse_string;
 
-macro_rules! get_cast {
-    ($iface: expr, $props: expr, $prop_name: expr, $type: ty) => {
-        crate::props::parse!($iface, $props, $prop_name, |value| value
-            .0
-            .as_any()
-            .downcast_ref::<$type>())
-        .to_owned()
+fn parse_cast<T>(props: &PropMap, prop_name: &str, iface: &str) -> Result<T, PropertyError>
+where
+    T: Clone + 'static,
+{
+    parse(props, prop_name, iface, |value| {
+        value.0.as_any().downcast_ref::<T>().map(T::to_owned)
+    })
+}
+
+macro_rules! try_from_prop_map {
+    ($struct: ident) => {
+        impl TryFrom<dbus::arg::PropMap> for $struct {
+            type Error = PropertyError;
+            fn try_from(value: dbus::arg::PropMap) -> Result<Self, Self::Error> {
+                Self::from_prop_map(&value)
+            }
+        }
     };
 }
-pub(self) use get_cast;
+pub(self) use try_from_prop_map;

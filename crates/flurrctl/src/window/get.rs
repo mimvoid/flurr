@@ -1,5 +1,5 @@
 use dbus::blocking::Connection;
-use flurr_dbus::{Application, Window, props, props::ShellProps};
+use flurr_dbus::{Application, ProxyWrapper, Window, props, props::ShellProps};
 use heck::ToSnakeCase;
 use std::io::{Write, stdout};
 
@@ -33,9 +33,9 @@ pub fn get_windows(conn: &Connection, opts: &GetCommand) -> crate::Result<()> {
     };
 
     let id_props = paths.iter().map(|path| {
-        let proxy = Window::with_path(conn, instance, path).proxy;
-        let props = props::WindowProps::get_blocking(&proxy);
-        props.map(|p| (proxy.path.rsplit_once('/').map(|s| s.1.to_owned()), p))
+        let win = Window::with_path(conn, instance, path);
+        let props = props::WindowProps::get_blocking(win.proxy());
+        props.map(|p| (win.proxy().path.rsplit_once('/').map(|s| s.1.to_owned()), p))
     });
 
     let mut lock = stdout().lock();

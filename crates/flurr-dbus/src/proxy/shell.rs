@@ -1,110 +1,79 @@
 use crate::Window;
 
-pub trait Shell: hidden::Shell {
-    fn namespace(&self) -> dbus::Result<String>;
-
-    fn layer(&self) -> dbus::Result<u8>;
-    fn set_layer(&self, value: u8) -> dbus::Result<()>;
-
-    fn keyboard_mode(&self) -> dbus::Result<u8>;
-    fn set_keyboard_mode(&self, value: u8) -> dbus::Result<()>;
-
-    fn anchor(&self) -> dbus::Result<u8>;
-    fn set_anchor(&self, value: u8) -> dbus::Result<()>;
-
-    fn exclusion(&self) -> dbus::Result<i32>;
-    fn set_exclusion(&self, value: i32) -> dbus::Result<()>;
-
-    fn auto_exclusion(&self) -> dbus::Result<bool>;
-    fn set_auto_exclusion(&self, value: bool) -> dbus::Result<()>;
-
-    fn margin_top(&self) -> dbus::Result<i32>;
-    fn set_margin_top(&self, value: i32) -> dbus::Result<()>;
-
-    fn margin_right(&self) -> dbus::Result<i32>;
-    fn set_margin_right(&self, value: i32) -> dbus::Result<()>;
-
-    fn margin_bottom(&self) -> dbus::Result<i32>;
-    fn set_margin_bottom(&self, value: i32) -> dbus::Result<()>;
-
-    fn margin_left(&self) -> dbus::Result<i32>;
-    fn set_margin_left(&self, value: i32) -> dbus::Result<()>;
-}
-
-mod hidden {
-    pub trait Shell {
-        crate::proxy::dbus_default_trait!();
-    }
-}
-impl<'a, 'b> hidden::Shell for Window<'a, 'b> {
-    super::dbus_default_interface!("io.flurr.Shell");
-}
-
-impl<'a, 'b> Shell for Window<'a, 'b> {
+pub trait Shell<'a, 'b>: hidden::Shell<'a, 'b> {
     fn namespace(&self) -> dbus::Result<String> {
-        hidden::Shell::get(self, "Namespace")
+        self.get("Namespace")
     }
 
     fn layer(&self) -> dbus::Result<u8> {
-        hidden::Shell::get(self, "Layer")
+        self.get("Layer")
     }
     fn set_layer(&self, value: u8) -> dbus::Result<()> {
-        hidden::Shell::set(self, "Layer", value)
+        self.set("Layer", value)
     }
 
     fn keyboard_mode(&self) -> dbus::Result<u8> {
-        hidden::Shell::get(self, "KeyboardMode")
+        self.get("KeyboardMode")
     }
     fn set_keyboard_mode(&self, value: u8) -> dbus::Result<()> {
-        hidden::Shell::set(self, "KeyboardMode", value)
+        self.set("KeyboardMode", value)
     }
 
     fn anchor(&self) -> dbus::Result<u8> {
-        hidden::Shell::get(self, "Anchor")
+        self.get("Anchor")
     }
     fn set_anchor(&self, value: u8) -> dbus::Result<()> {
-        hidden::Shell::set(self, "Anchor", value)
+        self.set("Anchor", value)
     }
 
     fn exclusion(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "Exclusion")
+        self.get("Exclusion")
     }
     fn set_exclusion(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "Exclusion", value)
+        self.set("Exclusion", value)
     }
 
     fn auto_exclusion(&self) -> dbus::Result<bool> {
-        hidden::Shell::get(self, "AutoExclusion")
+        self.get("AutoExclusion")
     }
     fn set_auto_exclusion(&self, value: bool) -> dbus::Result<()> {
-        hidden::Shell::set(self, "AutoExclusion", value)
+        self.set("AutoExclusion", value)
     }
 
     fn margin_top(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "MarginTop")
+        self.get("MarginTop")
     }
     fn set_margin_top(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "MarginTop", value)
+        self.set("MarginTop", value)
     }
 
     fn margin_right(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "MarginRight")
+        self.get("MarginRight")
     }
     fn set_margin_right(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "MarginRight", value)
+        self.set("MarginRight", value)
     }
 
     fn margin_bottom(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "MarginBottom")
+        self.get("MarginBottom")
     }
     fn set_margin_bottom(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "MarginBottom", value)
+        self.set("MarginBottom", value)
     }
 
     fn margin_left(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "MarginLeft")
+        self.get("MarginLeft")
     }
     fn set_margin_left(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "MarginLeft", value)
+        self.set("MarginLeft", value)
     }
 }
+
+mod hidden {
+    pub trait Shell<'a, 'b>: crate::proxy::ProxyWrapper<'a, 'b> {
+        crate::proxy::dbus_default_interface!("io.flurr.Shell");
+    }
+}
+
+impl<'a, 'b> hidden::Shell<'a, 'b> for Window<'a, 'b> {}
+impl<'a, 'b> Shell<'a, 'b> for Window<'a, 'b> {}

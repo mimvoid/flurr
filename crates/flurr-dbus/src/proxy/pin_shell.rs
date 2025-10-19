@@ -1,24 +1,19 @@
 use crate::Window;
 
-pub trait PinShell: hidden::PinShell {
-    fn unlocked(&self) -> dbus::Result<bool>;
-    fn set_unlocked(&self, value: bool) -> dbus::Result<()>;
+pub trait PinShell<'a, 'b>: hidden::PinShell<'a, 'b> {
+    fn unlocked(&self) -> dbus::Result<bool> {
+        self.get("Unlocked")
+    }
+    fn set_unlocked(&self, value: bool) -> dbus::Result<()> {
+        self.set("Unlocked", value)
+    }
 }
 
 mod hidden {
-    pub trait PinShell {
-        crate::proxy::dbus_default_trait!();
+    pub trait PinShell<'a, 'b>: crate::proxy::ProxyWrapper<'a, 'b> {
+        crate::proxy::dbus_default_interface!("io.flurr.PinShell");
     }
-}
-impl<'a, 'b> hidden::PinShell for Window<'a, 'b> {
-    super::dbus_default_interface!("io.flurr.PinShell");
 }
 
-impl<'a, 'b> PinShell for Window<'a, 'b> {
-    fn unlocked(&self) -> dbus::Result<bool> {
-        hidden::PinShell::get(self, "Unlocked")
-    }
-    fn set_unlocked(&self, value: bool) -> dbus::Result<()> {
-        hidden::PinShell::set(self, "Unlocked", value)
-    }
-}
+impl<'a, 'b> hidden::PinShell<'a, 'b> for Window<'a, 'b> {}
+impl<'a, 'b> PinShell<'a, 'b> for Window<'a, 'b> {}

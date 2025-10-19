@@ -1,4 +1,4 @@
-use super::{BlockingProperties, PinShellProps, PropertyError, ShellProps, get_cast, parse_string};
+use super::{BlockingProperties, PinShellProps, PropertyError, ShellProps};
 use dbus::arg::PropMap;
 
 #[derive(Debug, Default)]
@@ -42,8 +42,8 @@ impl WindowProps {
         };
 
         Ok(WindowProps {
-            name: parse_string!("io.flurr.Window", window, "Name"),
-            visible: get_cast!("io.flurr.Window", window, "Visible", bool),
+            name: super::parse_string(window, "Name", "io.flurr.Window")?,
+            visible: super::parse_cast(window, "Visible", "io.flurr.Window")?,
             shell: shell_props,
             pin_shell: pin_shell_props,
         })
@@ -60,9 +60,4 @@ impl WindowProps {
     }
 }
 
-impl TryFrom<dbus::arg::PropMap> for WindowProps {
-    type Error = PropertyError;
-    fn try_from(value: dbus::arg::PropMap) -> Result<Self, Self::Error> {
-        Self::from_prop_map(&value)
-    }
-}
+super::try_from_prop_map!(WindowProps);

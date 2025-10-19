@@ -21,30 +21,25 @@ impl ShellProps {
     }
 
     pub fn from_prop_map(props: &dbus::arg::PropMap) -> Result<Self, PropertyError> {
-        macro_rules! get_cast {
-            ($prop_name: expr, $type: ty) => {
-                super::get_cast!("io.flurr.Shell", props, $prop_name, $type)
+        macro_rules! parse_cast {
+            ($prop_name: expr) => {
+                super::parse_cast(props, $prop_name, "io.flurr.Shell")
             };
         }
 
         Ok(ShellProps {
-            namespace: parse_string!("io.flurr.Shell", props, "Namespace"),
-            layer: get_cast!("Layer", u8),
-            keyboard_mode: get_cast!("KeyboardMode", u8),
-            anchor: get_cast!("Anchor", u8),
-            exclusion: get_cast!("Exclusion", i32),
-            auto_exclusion: get_cast!("AutoExclusion", bool),
-            margin_top: get_cast!("MarginTop", i32),
-            margin_right: get_cast!("MarginRight", i32),
-            margin_bottom: get_cast!("MarginBottom", i32),
-            margin_left: get_cast!("MarginLeft", i32),
+            namespace: parse_string(props, "Namespace", "io.flurr.Shell")?,
+            layer: parse_cast!("Layer")?,
+            keyboard_mode: parse_cast!("KeyboardMode")?,
+            anchor: parse_cast!("Anchor")?,
+            exclusion: parse_cast!("Exclusion")?,
+            auto_exclusion: parse_cast!("AutoExclusion")?,
+            margin_top: parse_cast!("MarginTop")?,
+            margin_right: parse_cast!("MarginRight")?,
+            margin_bottom: parse_cast!("MarginBottom")?,
+            margin_left: parse_cast!("MarginLeft")?,
         })
     }
 }
 
-impl TryFrom<dbus::arg::PropMap> for ShellProps {
-    type Error = PropertyError;
-    fn try_from(value: dbus::arg::PropMap) -> Result<Self, Self::Error> {
-        Self::from_prop_map(&value)
-    }
-}
+super::try_from_prop_map!(ShellProps);

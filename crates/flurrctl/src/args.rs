@@ -18,12 +18,10 @@ pub struct Cli {
 pub enum Commands {
     /// Toggle the visibility of a window
     Toggle(WindowCommand),
-    /// Make a window visible
-    Show(WindowCommand),
-    /// Make a window invisible
-    Hide(WindowCommand),
     /// Print windows and their properties
     Get(GetCommand),
+    /// Set properties for a window
+    Set(SetCommand),
     /// Print registered Flurr instances
     Instances,
     /// Quit an instance
@@ -67,4 +65,35 @@ pub struct GetCommand {
     /// Print enums and bitflags as numbers instead of strings
     #[arg(short, long)]
     pub raw: bool,
+}
+
+#[derive(Args)]
+pub struct SetCommand {
+    /// The name or id of the window to set the properties
+    pub window: String,
+
+    #[arg(long)]
+    pub visible: Option<bool>,
+
+    #[arg(long)]
+    pub layer: Option<String>,
+    #[arg(long)]
+    pub keyboard_mode: Option<String>,
+    #[arg(long)]
+    pub anchor: Option<String>,
+    #[arg(long)]
+    pub zindex: Option<i32>,
+    #[arg(long)]
+    pub auto_exclusive_zone: Option<bool>,
+    #[arg(long)]
+    pub margin_top: Option<i32>,
+    #[arg(long)]
+    pub margin_right: Option<i32>,
+    #[arg(long)]
+    pub margin_bottom: Option<i32>,
+    #[arg(long)]
+    pub margin_left: Option<i32>,
+
+    #[arg(long)]
+    pub unlocked: Option<bool>,
 }

@@ -1,8 +1,10 @@
 mod get;
-mod visibility;
+mod set;
+mod toggle;
 
 pub use get::get_windows;
-pub use visibility::{hide_window, show_window, toggle_window};
+pub use set::set_window;
+pub use toggle::toggle_window;
 
 use dbus::blocking::Connection;
 

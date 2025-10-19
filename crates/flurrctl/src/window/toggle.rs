@@ -32,14 +32,6 @@ where
     Ok(())
 }
 
-macro_rules! with_window_method {
-    ($name: ident, $info_msg: expr, $method: expr) => {
-        pub fn $name(conn: &Connection, instance: &str, window: &str) -> crate::Result<()> {
-            window_method(conn, instance, window, $info_msg, $method)
-        }
-    };
+pub fn toggle_window(conn: &Connection, instance: &str, window: &str) -> crate::Result<()> {
+    window_method(conn, instance, window, "Toggling window", |w| w.toggle())
 }
-
-with_window_method!(toggle_window, "Toggling window", |w| w.toggle());
-with_window_method!(show_window, "Showing window", |w| w.set_visible(true));
-with_window_method!(hide_window, "Hiding window", |w| w.set_visible(false));

@@ -13,9 +13,9 @@ pub fn get_windows(conn: &Connection, opts: &GetCommand) -> crate::Result<()> {
     };
 
     let id_props = paths.iter().map(|path| {
-        let window = Window::with_path(conn, instance, path.clone());
-        let props = props::WindowProps::get_blocking(&window.proxy);
-        props.map(|p| (path.rsplit_once('/').map(|s| s.1), p))
+        let proxy = Window::with_path(conn, instance, path).proxy;
+        let props = props::WindowProps::get_blocking(&proxy);
+        props.map(|p| (proxy.path.rsplit_once('/').map(|s| s.1.to_owned()), p))
     });
 
     let mut lock = stdout().lock();

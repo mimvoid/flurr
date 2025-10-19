@@ -16,7 +16,7 @@ where
 {
     log::info!("Finding window");
     let window_path = super::get_window_path(&conn, instance, window)?;
-    let window_proxy = Window::with_path(&conn, instance, window_path.clone());
+    let window_proxy = Window::with_path(&conn, instance, window_path);
 
     log::info!("{info_msg}");
 
@@ -24,7 +24,7 @@ where
         DBusError::ServiceUnknown => Error::ServiceUnknown(instance.to_owned()),
         DBusError::UnknownMethod => Error::WindowError {
             name: window.to_string(),
-            path: window_path,
+            path: window_proxy.proxy.path,
             dbus_error: err,
         },
         _ => Error::DBus(err),

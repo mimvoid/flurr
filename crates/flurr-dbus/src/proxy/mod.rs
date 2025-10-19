@@ -83,3 +83,13 @@ macro_rules! dbus_default_trait {
     };
 }
 pub(super) use dbus_default_trait;
+
+macro_rules! ping {
+    ($vis: vis) => {
+        $vis fn ping(&self) -> dbus::Result<()> {
+            use dbus::blocking::stdintf::org_freedesktop_dbus::Peer;
+            self.proxy.ping()
+        }
+    };
+}
+pub(super) use ping;

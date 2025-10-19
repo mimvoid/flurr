@@ -1,4 +1,4 @@
-use super::{TIMEOUT, dbus_default_interface, make_dest, make_object_path};
+use super::{TIMEOUT, dbus_default_interface, make_dest, make_object_path, ping};
 use dbus::blocking::{Connection, Proxy};
 
 pub struct Application<'a, 'b> {
@@ -7,6 +7,7 @@ pub struct Application<'a, 'b> {
 
 impl<'a, 'b> Application<'a, 'b> {
     dbus_default_interface!("io.flurr.Application");
+    ping!(pub);
 
     pub fn new(connection: &'b Connection, instance_name: &str) -> Self {
         Self {

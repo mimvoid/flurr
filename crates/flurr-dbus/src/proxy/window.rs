@@ -1,6 +1,6 @@
 use dbus::blocking::{Connection, Proxy};
 
-use super::{dbus_default_interface, make_dest, TIMEOUT};
+use super::{TIMEOUT, dbus_default_interface, make_dest, ping};
 use crate::make_window_path;
 
 pub struct Window<'a, 'b> {
@@ -9,6 +9,7 @@ pub struct Window<'a, 'b> {
 
 impl<'a, 'b> Window<'a, 'b> {
     dbus_default_interface!("io.flurr.Window");
+    ping!(pub);
 
     pub fn new(connection: &'b Connection, instance_name: &str, id: &u32) -> Self {
         Self {

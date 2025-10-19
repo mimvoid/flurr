@@ -12,7 +12,7 @@ mod app;
 mod window;
 
 use app::{list_instances, quit};
-use window::{get_windows, toggle_window, set_window};
+use window::{get_windows, set_window, toggle_window};
 
 fn main() -> ExitCode {
     let args = args::Cli::parse();
@@ -30,10 +30,10 @@ fn main() -> ExitCode {
     };
 
     let res = match &args.subcommand {
-        Commands::Toggle(win) => toggle_window(&conn, args.instance.as_str(), win.window.as_str()),
-        Commands::Get(get_cmd) => get_windows(&conn, args.instance.as_str(), &get_cmd),
-        Commands::Set(set_cmd) => set_window(&conn, args.instance.as_str(), &set_cmd),
-        Commands::Quit => quit(&conn, args.instance.as_str()),
+        Commands::Toggle(win) => toggle_window(&conn, win.instance.as_str(), win.window.as_str()),
+        Commands::Get(get_cmd) => get_windows(&conn, &get_cmd),
+        Commands::Set(set_cmd) => set_window(&conn, &set_cmd),
+        Commands::Quit { instances } => quit(&conn, instances),
         Commands::Instances => list_instances(&conn),
     };
 

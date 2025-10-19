@@ -4,7 +4,8 @@ use std::io::{Write, stdout};
 
 use crate::{Error, args::GetCommand};
 
-pub fn get_windows(conn: &Connection, instance: &str, opts: &GetCommand) -> crate::Result<()> {
+pub fn get_windows(conn: &Connection, opts: &GetCommand) -> crate::Result<()> {
+    let instance = opts.instance.as_ref();
     let paths = if opts.windows.is_empty() {
         get_paths_all(conn, instance)?
     } else {

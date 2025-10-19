@@ -3,10 +3,6 @@ use clap::{Args, Parser, Subcommand};
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 pub struct Cli {
-    /// Name of the Flurr instance
-    #[arg(short, long, global = true, default_value = "Flurr")]
-    pub instance: String,
-
     #[command(flatten)]
     pub verbosity: Verbosity,
 
@@ -25,13 +21,20 @@ pub enum Commands {
     /// Print registered Flurr instances
     Instances,
     /// Quit an instance
-    Quit,
+    Quit {
+        /// Name(s) of the Flurr instances
+        instances: Vec<String>,
+    },
 }
 
 #[derive(Args)]
 pub struct WindowCommand {
     /// The window name, or the id if a number
     pub window: String,
+
+    /// Name of the Flurr instance
+    #[arg(short, long, default_value = "Flurr")]
+    pub instance: String,
 }
 
 #[derive(Args)]
@@ -62,6 +65,10 @@ pub struct GetCommand {
     /// The names or ids of the windows to print
     pub windows: Vec<String>,
 
+    /// Name of the Flurr instance
+    #[arg(short, long, default_value = "Flurr")]
+    pub instance: String,
+
     /// Print enums and bitflags as numbers instead of strings
     #[arg(short, long)]
     pub raw: bool,
@@ -71,6 +78,10 @@ pub struct GetCommand {
 pub struct SetCommand {
     /// The name or id of the window to set the properties
     pub window: String,
+
+    /// Name of the Flurr instance
+    #[arg(short, long, default_value = "Flurr")]
+    pub instance: String,
 
     #[arg(long)]
     pub visible: Option<bool>,

@@ -1,10 +1,11 @@
 use dbus::blocking::Connection;
-use flurr_dbus::{Window, Shell, PinShell};
+use flurr_dbus::{PinShell, Shell, Window};
 use std::str::FromStr;
 
 use crate::args::SetCommand;
 
-pub fn set_window(conn: &Connection, instance: &str, opts: &SetCommand) -> crate::Result<()> {
+pub fn set_window(conn: &Connection, opts: &SetCommand) -> crate::Result<()> {
+    let instance = opts.instance.as_ref();
     let path = super::get_window_path(conn, instance, opts.window.as_str())?;
     let window = Window::with_path(conn, instance, path);
 

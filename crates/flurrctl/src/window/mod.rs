@@ -1,4 +1,5 @@
 mod get;
+mod property_flags;
 mod set;
 mod toggle;
 

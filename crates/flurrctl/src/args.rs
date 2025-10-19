@@ -69,6 +69,10 @@ pub struct GetCommand {
     #[arg(short, long, default_value = "Flurr")]
     pub instance: String,
 
+    /// Only print the given properties, or all properties by default
+    #[arg(short, long, num_args = 1..)]
+    pub properties: Option<Vec<String>>,
+
     /// Print enums and bitflags as numbers instead of strings
     #[arg(short, long)]
     pub raw: bool,

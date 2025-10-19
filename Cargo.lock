@@ -156,11 +156,13 @@ dependencies = [
 name = "flurrctl"
 version = "0.1.0"
 dependencies = [
+ "bitflags",
  "clap",
  "dbus",
  "env_logger",
  "flurr-dbus",
  "flurr-enums",
+ "heck",
  "log",
  "thiserror",
 ]

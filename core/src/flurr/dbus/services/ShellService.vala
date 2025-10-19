@@ -34,13 +34,13 @@ public class Flurr.ShellService : FlurrDBus.Shell, Flurr.DBusService, Object {
         shell.anchor = (Flurr.Anchor) value;
     }
   }
-  public int z_index {
-    get { return shell.z_index; }
-    set { shell.z_index = value; }
+  public int exclusion {
+    get { return shell.exclusion; }
+    set { shell.exclusion = value; }
   }
-  public bool auto_exclusive_zone {
-    get { return shell.auto_exclusive_zone; }
-    set { shell.auto_exclusive_zone = value; }
+  public bool auto_exclusion {
+    get { return shell.auto_exclusion; }
+    set { shell.auto_exclusion = value; }
   }
 
   public int margin_top {

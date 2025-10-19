@@ -96,12 +96,12 @@ pub struct SetCommand {
     /// Screen edges to anchor to [ex: "TOP | LEFT", 13]
     #[arg(long)]
     pub anchor: Option<String>,
-    /// Shell exclusion zone, overwrites --auto-exclusive-zone
+    /// Shell exclusion zone, overwrites --auto-exclusion
     #[arg(long)]
-    pub zindex: Option<i32>,
+    pub exclusion: Option<i32>,
     /// Automatically exclude the window with margins
-    #[arg(long, value_name = "AUTO_EXCLUDE", hide_possible_values = true)]
-    pub auto_exclusive_zone: Option<bool>,
+    #[arg(long, hide_possible_values = true)]
+    pub auto_exclusion: Option<bool>,
     /// Margin for top anchor
     #[arg(long)]
     pub margin_top: Option<i32>,

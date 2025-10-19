@@ -31,18 +31,18 @@ public class Flurr.Shell : Gtk.ApplicationWindow {
     set { GtkLayerShell.set_keyboard_mode(this, (GtkLayerShell.KeyboardMode) value); }
   }
 
-  public int z_index {
+  public int exclusion {
     get { return GtkLayerShell.get_exclusive_zone(this); }
     set { GtkLayerShell.set_exclusive_zone(this, value); }
   }
 
-  public bool auto_exclusive_zone {
+  public bool auto_exclusion {
     get { return GtkLayerShell.auto_exclusive_zone_is_enabled(this); }
     set {
       if (value)
         GtkLayerShell.auto_exclusive_zone_enable(this);
       else
-        GtkLayerShell.set_exclusive_zone(this, z_index);
+        GtkLayerShell.set_exclusive_zone(this, 0);
     }
   }
 

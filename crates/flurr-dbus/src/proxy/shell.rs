@@ -12,11 +12,11 @@ pub trait Shell: hidden::Shell {
     fn anchor(&self) -> dbus::Result<u8>;
     fn set_anchor(&self, value: u8) -> dbus::Result<()>;
 
-    fn zindex(&self) -> dbus::Result<i32>;
-    fn set_zindex(&self, value: i32) -> dbus::Result<()>;
+    fn exclusion(&self) -> dbus::Result<i32>;
+    fn set_exclusion(&self, value: i32) -> dbus::Result<()>;
 
-    fn auto_exclusive_zone(&self) -> dbus::Result<bool>;
-    fn set_auto_exclusive_zone(&self, value: bool) -> dbus::Result<()>;
+    fn auto_exclusion(&self) -> dbus::Result<bool>;
+    fn set_auto_exclusion(&self, value: bool) -> dbus::Result<()>;
 
     fn margin_top(&self) -> dbus::Result<i32>;
     fn set_margin_top(&self, value: i32) -> dbus::Result<()>;
@@ -66,18 +66,18 @@ impl<'a, 'b> Shell for Window<'a, 'b> {
         hidden::Shell::set(self, "Anchor", value)
     }
 
-    fn zindex(&self) -> dbus::Result<i32> {
-        hidden::Shell::get(self, "ZIndex")
+    fn exclusion(&self) -> dbus::Result<i32> {
+        hidden::Shell::get(self, "Exclusion")
     }
-    fn set_zindex(&self, value: i32) -> dbus::Result<()> {
-        hidden::Shell::set(self, "ZIndex", value)
+    fn set_exclusion(&self, value: i32) -> dbus::Result<()> {
+        hidden::Shell::set(self, "Exclusion", value)
     }
 
-    fn auto_exclusive_zone(&self) -> dbus::Result<bool> {
-        hidden::Shell::get(self, "AutoExclusiveZone")
+    fn auto_exclusion(&self) -> dbus::Result<bool> {
+        hidden::Shell::get(self, "AutoExclusion")
     }
-    fn set_auto_exclusive_zone(&self, value: bool) -> dbus::Result<()> {
-        hidden::Shell::set(self, "AutoExclusiveZone", value)
+    fn set_auto_exclusion(&self, value: bool) -> dbus::Result<()> {
+        hidden::Shell::set(self, "AutoExclusion", value)
     }
 
     fn margin_top(&self) -> dbus::Result<i32> {

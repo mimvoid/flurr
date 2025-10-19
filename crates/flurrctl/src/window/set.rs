@@ -43,11 +43,11 @@ pub fn set_window(conn: &Connection, opts: &SetCommand) -> crate::Result<()> {
         }
     }
 
-    if let Some(zindex) = opts.zindex {
-        window.set_zindex(zindex)?;
+    if let Some(zindex) = opts.exclusion {
+        window.set_exclusion(zindex)?;
     }
-    if let Some(auto_exclusion) = opts.auto_exclusive_zone {
-        window.set_auto_exclusive_zone(auto_exclusion)?;
+    if let Some(auto_exclusion) = opts.auto_exclusion {
+        window.set_auto_exclusion(auto_exclusion)?;
     }
     if let Some(mtop) = opts.margin_top {
         window.set_margin_top(mtop)?;

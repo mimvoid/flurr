@@ -56,9 +56,9 @@ fn display_shell_props(buf: &mut impl Write, props: &ShellProps, raw: bool) -> c
 
     writeln!(
         buf,
-        "  auto_exclusive_zone: {}\n  z_index: {}\n  margin_top: {}\n  margin_right: {}\n  margin_bottom: {}\n  margin_left: {}",
-        props.auto_exclusive_zone,
-        props.zindex,
+        "  auto_exclusion: {}\n  exclusion: {}\n  margin_top: {}\n  margin_right: {}\n  margin_bottom: {}\n  margin_left: {}",
+        props.auto_exclusion,
+        props.exclusion,
         props.margin_top,
         props.margin_right,
         props.margin_bottom,

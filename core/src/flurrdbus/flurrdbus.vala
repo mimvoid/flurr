@@ -31,8 +31,8 @@ public interface Shell : Object {
   public abstract uint8 layer { get; set; }
   public abstract uint8 keyboard_mode { get; set; }
   public abstract uint8 anchor { get; set; }
-  public abstract int z_index { get; set; }
-  public abstract bool auto_exclusive_zone { get; set; }
+  public abstract int exclusion { get; set; }
+  public abstract bool auto_exclusion { get; set; }
 
   public abstract int margin_top { get; set; }
   public abstract int margin_right { get; set; }

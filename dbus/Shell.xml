@@ -6,8 +6,8 @@
     <property type="y" name="Layer" access="readwrite"/>
     <property type="y" name="KeyboardMode" access="readwrite"/>
     <property type="y" name="Anchor" access="readwrite"/>
-    <property type="i" name="ZIndex" access="readwrite"/>
-    <property type="b" name="AutoExclusiveZone" access="readwrite"/>
+    <property type="i" name="Exclusion" access="readwrite"/>
+    <property type="b" name="AutoExclusion" access="readwrite"/>
     <property type="i" name="MarginTop" access="readwrite"/>
     <property type="i" name="MarginRight" access="readwrite"/>
     <property type="i" name="MarginBottom" access="readwrite"/>

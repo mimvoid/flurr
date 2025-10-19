@@ -2,9 +2,9 @@ namespace Flurr {
 [Flags]
 public enum Anchor {
   TOP,
+  RIGHT,
   BOTTOM,
-  LEFT,
-  RIGHT;
+  LEFT;
 
   /**
    * Check if only known bits for Flurr.Anchor are set.

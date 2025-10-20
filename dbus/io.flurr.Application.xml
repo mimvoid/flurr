@@ -4,7 +4,7 @@
   <interface name="io.flurr.Application">
     <method name="GetWindowPath">
       <arg type="s" name="window_name" direction="in"/>
-      <arg type="o" name="result" direction="out" />
+      <arg type="o" name="result" direction="out"/>
     </method>
     <method name="ListWindowNames">
       <arg type="as" name="result" direction="out"/>

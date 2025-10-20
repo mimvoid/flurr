@@ -8,6 +8,7 @@
  */
 public class Flurr.Application : Gtk.Application {
   private bool enable_dbus = true; // TODO: set on construction
+  private List<Gtk.CssProvider> css_providers = new List<Gtk.CssProvider>();
 
   /**
    * Construct a Flurr application with the default instance name, "Flurr".
@@ -98,5 +99,59 @@ public class Flurr.Application : Gtk.Application {
   public void toggle_window(string name) throws IOError {
     var window = check_window_name(name);
     window.visible = !window.visible;
+  }
+
+  // CSS
+  // NOTE: GTK 4.20 added prefers-color-scheme and prefers-contrast to CSS Providers,
+  // which would be nice to include here
+
+  private Gtk.CssProvider? add_css(Gtk.CssProvider? provider) {
+    if (provider != null) {
+      css_providers.append(provider);
+    }
+    return provider;
+  }
+
+  /**
+   * Parses a CSS string, and if successful, adds it to the application's list of CSS Providers.
+   */
+  public Gtk.CssProvider? load_css_string(
+    string css, int priority = Gtk.STYLE_PROVIDER_PRIORITY_USER
+  ) {
+    return add_css(Flurr.load_css_string(css, priority));
+  }
+
+  /**
+   * Parses a CSS file, and if successful, adds it to the application's list of CSS Providers.
+   */
+  public Gtk.CssProvider? load_css_file(
+    File file, int priority = Gtk.STYLE_PROVIDER_PRIORITY_USER
+  ) {
+    return add_css(Flurr.load_css_file(file, priority));
+  }
+
+  /**
+   * Parses CSS from a file path, and if successful, adds it to the application's list of
+   * CSS Providers.
+   */
+  public Gtk.CssProvider? load_css_path(
+    string path, int priority = Gtk.STYLE_PROVIDER_PRIORITY_USER
+  ) {
+    return add_css(Flurr.load_css_path(path, priority));
+  }
+
+  /**
+   * Removes all known CSS Providers known to the application from the default Gdk.Display.
+   */
+  public void reset_css() {
+    var display = Gdk.Display.get_default();
+    if (display == null) {
+      warning(@"Couldn't get the default Gdk.Display to reset CSS.");
+      return;
+    }
+
+    foreach (var provider in css_providers) {
+      Gtk.StyleContext.remove_provider_for_display(display, provider);
+    }
   }
 }

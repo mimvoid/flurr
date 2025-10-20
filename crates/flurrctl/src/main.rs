@@ -31,8 +31,8 @@ fn main() -> ExitCode {
 
     let res = match &args.subcommand {
         Commands::Toggle(win) => toggle_window(&conn, win.instance.as_str(), win.window.as_str()),
-        Commands::Get(get_cmd) => get_windows(&conn, &get_cmd),
-        Commands::Set(set_cmd) => set_window(&conn, &set_cmd),
+        Commands::Get(get_cmd) => get_windows(&conn, get_cmd),
+        Commands::Set(set_cmd) => set_window(&conn, set_cmd),
         Commands::Quit { instances } => quit(&conn, instances),
         Commands::Instances => list_instances(&conn),
     };

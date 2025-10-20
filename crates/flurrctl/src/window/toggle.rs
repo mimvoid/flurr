@@ -15,14 +15,14 @@ where
     F: Fn(&Window) -> dbus::Result<()>,
 {
     log::info!("Finding window");
-    let window_path = super::get_window_path(&conn, instance, window)?;
-    let window_proxy = Window::with_path(&conn, instance, window_path);
+    let window_path = super::get_window_path(conn, instance, window)?;
+    let window_proxy = Window::with_path(conn, instance, window_path);
 
     log::info!("{info_msg}");
 
     f(&window_proxy).map_err(|err| match DBusError::from(&err) {
         DBusError::ServiceUnknown => Error::ServiceUnknown(instance.to_owned()),
-        DBusError::UnknownMethod => Error::WindowError {
+        DBusError::UnknownMethod => Error::Window {
             name: window.to_string(),
             path: window_proxy.proxy().path.clone(),
             dbus_error: err,

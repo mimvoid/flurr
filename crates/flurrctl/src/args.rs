@@ -48,11 +48,11 @@ pub struct Verbosity {
     pub verbose: bool,
 }
 
-impl Into<log::LevelFilter> for Verbosity {
-    fn into(self) -> log::LevelFilter {
-        if self.quiet {
+impl From<Verbosity> for log::LevelFilter {
+    fn from(value: Verbosity) -> Self {
+        if value.quiet {
             log::LevelFilter::Off
-        } else if self.verbose {
+        } else if value.verbose {
             log::LevelFilter::Info
         } else {
             log::LevelFilter::Warn

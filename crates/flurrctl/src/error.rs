@@ -14,7 +14,7 @@ pub enum Error {
     #[error("Failed to call window {} (id {}){}", .name,
                 .path.rsplit_once('/').map_or("", |p| p.1),
                 .dbus_error.message().map_or_else(|| Cow::Borrowed(""), |m| Cow::Borrowed(": ") + m))]
-    WindowError {
+    Window {
         name: String,
         path: dbus::Path<'static>,
         dbus_error: dbus::Error,
@@ -29,7 +29,7 @@ pub enum Error {
     PropertyError(#[from] flurr_dbus::props::PropertyError),
 
     #[error("{0}")]
-    IOError(#[from] std::io::Error),
+    IO(#[from] std::io::Error),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

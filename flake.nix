@@ -12,14 +12,8 @@
         default = pkgs.mkShell {
           name = "Flurr";
 
+          nativeBuildInputs = [ pkgs.pkg-config ];
           packages = with pkgs; [
-            pkg-config
-            meson
-            ninja
-            vala
-            gcc
-            vala-language-server
-
             glib
             gobject-introspection
             gtk4
@@ -31,12 +25,20 @@
           '';
         };
 
-        ctl = pkgs.mkShell {
-          name = "Flurrctl";
+        core = pkgs.mkShell {
+          name = "Flurr-core";
+          packages = with pkgs; [
+            meson
+            ninja
+            vala
+            gcc
+            vala-language-server
+          ];
+        };
 
-          nativeBuildInputs = [ pkgs.pkg-config ];
+        rust = pkgs.mkShell {
+          name = "Flurr-rust";
           buildInputs = [ pkgs.dbus ];
-
           packages = with pkgs; [
             rustc
             cargo

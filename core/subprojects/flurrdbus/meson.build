@@ -12,6 +12,7 @@ dependencies = [
   dependency('gio-2.0'),
 ]
 
+filebase = meson.project_name() + '-' + api_version
 gir = 'FlurrDBus-' + api_version + '.gir'
 install_dir = [true, true, true]
 
@@ -26,6 +27,7 @@ flurrdbus_lib = shared_library(
   version: meson.project_version(),
   dependencies: dependencies,
   vala_gir: gir,
+  vala_vapi: filebase + '.vapi',
   install: true,
   install_dir: install_dir
 )
@@ -50,5 +52,13 @@ flurrdbus_dep = declare_dependency(
   version: meson.project_version(),
   dependencies: dependencies,
   include_directories: include_directories('.'),
-  variables: ['build_dir=' + build_dir]
+  variables: ['girdir=' + build_dir]
+)
+
+import('pkgconfig').generate(
+  flurrdbus_lib,
+  filebase: filebase,
+  subdirs: meson.project_name(),
+  requires: dependencies,
+  variables: ['girdir=${prefix}/share/gir-1.0']
 )

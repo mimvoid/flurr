@@ -4,7 +4,7 @@ api_version = version_split[0] + '.' + version_split[1]
 introspection = get_option('introspection')
 
 flurrdbus_dep = dependency(
-  'flurrdbus',
+  'flurrdbus-0.1',
   fallback: ['flurrdbus', 'flurrdbus_dep'],
   default_options: ['introspection=' + introspection.to_string()],
 )
@@ -32,6 +32,7 @@ sources = files(
   'widgets/Shell.vala',
 )
 
+filebase = meson.project_name() + '-' + api_version
 gir = 'Flurr-' + api_version + '.gir'
 install_dir = [true, true, true]
 
@@ -45,6 +46,7 @@ flurr_lib = shared_library(
   version: meson.project_version(),
   dependencies: dependencies,
   vala_gir: gir,
+  vala_vapi: filebase + '.vapi',
   install: true,
   install_dir: install_dir,
 )
@@ -57,7 +59,7 @@ if introspection
     typelib,
     command: [
       g_ir_compiler,
-      '--includedir', flurrdbus_dep.get_variable('build_dir'),
+      '--includedir', flurrdbus_dep.get_variable('girdir'),
       '--output', '@OUTPUT@',
       meson.current_build_dir() / gir
     ],
@@ -73,4 +75,11 @@ flurr_dep = declare_dependency(
   version: meson.project_version(),
   dependencies: dependencies,
   include_directories: include_directories('.'),
+)
+
+import('pkgconfig').generate(
+  flurr_lib,
+  filebase: filebase,
+  subdirs: meson.project_name(),
+  requires: dependencies,
 )

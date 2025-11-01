@@ -9,6 +9,7 @@
     in
     {
       packages = toSystems (pkgs: import ./nix/pkgs { inherit pkgs; });
+      overlays.default = final: prev: import ./nix/pkgs { inherit (prev) pkgs; };
 
       devShells = toSystems (pkgs: {
         default = pkgs.mkShell {

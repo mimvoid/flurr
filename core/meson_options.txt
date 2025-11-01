@@ -1,13 +1,5 @@
-option(
-  'introspection',
-  type: 'boolean',
-  value: true,
-  description: 'Create GObject Introspection file definitions',
-)
+option('introspection', type: 'boolean', value: true,
+       description: 'Create GObject Introspection file definitions for all libraries')
 
-option(
-  'examples',
-  type: 'boolean',
-  value: true,
-  description: 'Build example applications',
-)
+option('examples', type: 'boolean', value: true,
+       description: 'Build example applications')

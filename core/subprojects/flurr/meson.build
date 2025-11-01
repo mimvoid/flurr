@@ -1,5 +1,8 @@
 project('flurr', ['vala', 'c'], version: '0.1.0', license: 'MPL-2.0')
 
+add_project_arguments('-w', language: 'c')
+add_project_arguments('--target-glib=auto', '--abi-stability', language: 'vala')
+
 version_split = meson.project_version().split('.')
 api_version = version_split[0] + '.' + version_split[1]
 

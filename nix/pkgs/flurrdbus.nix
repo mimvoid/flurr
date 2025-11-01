@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals introspection [ gobject-introspection ];
 
-  buildInputs = [ glib ];
+  propagatedBuildInputs = [ glib ];
 
   mesonFlags = [ (lib.mesonBool "introspection" introspection) ];
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals introspection [ gobject-introspection ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
     gtk4
     gtk4-layer-shell

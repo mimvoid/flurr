@@ -32,14 +32,16 @@ flurrdbus_lib = shared_library(
   install_dir: install_dir
 )
 
+build_dir = meson.current_build_dir()
+
 if introspection
   g_ir_compiler = find_program('g-ir-compiler')
   typelib = gir.replace('gir', 'typelib')
-  build_dir = meson.current_build_dir()
+  lib_path = get_option('prefix') / get_option('libdir') / import('fs').name(flurrdbus_lib.full_path())
 
   custom_target(
     typelib,
-    command: [g_ir_compiler, '--output', '@OUTPUT@', build_dir / gir],
+    command: [g_ir_compiler, '--output', '@OUTPUT@', '--shared-library', lib_path, build_dir / gir],
     depends: flurrdbus_lib,
     output: typelib,
     install: true,
@@ -60,5 +62,5 @@ import('pkgconfig').generate(
   filebase: filebase,
   subdirs: meson.project_name(),
   requires: dependencies,
-  variables: ['girdir=${prefix}/share/gir-1.0']
+  variables: ['girdir=${prefix}' / get_option('datadir') / 'gir-1.0']
 )

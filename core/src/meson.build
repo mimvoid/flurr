@@ -53,7 +53,8 @@ flurr_lib = shared_library(
 
 if introspection
   g_ir_compiler = find_program('g-ir-compiler')
-  typelib = 'Flurr-' + api_version + '.typelib'
+  typelib = gir.replace('gir', 'typelib')
+  lib_path = get_option('prefix') / get_option('libdir') / import('fs').name(flurr_lib.full_path())
 
   custom_target(
     typelib,
@@ -61,6 +62,7 @@ if introspection
       g_ir_compiler,
       '--includedir', flurrdbus_dep.get_variable('girdir'),
       '--output', '@OUTPUT@',
+      '--shared-library', lib_path,
       meson.current_build_dir() / gir
     ],
     output: typelib,

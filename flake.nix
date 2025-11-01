@@ -8,6 +8,8 @@
       toSystems = passPkgs: allSystems (system: passPkgs (import nixpkgs { inherit system; }));
     in
     {
+      packages = toSystems (pkgs: import ./nix/pkgs { inherit pkgs; });
+
       devShells = toSystems (pkgs: {
         default = pkgs.mkShell {
           name = "Flurr";

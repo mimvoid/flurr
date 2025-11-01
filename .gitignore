@@ -1,6 +1,7 @@
 .direnv
 
+# Meson and Cargo
+**/target/
 
-# Added by cargo
-
-/target
+# Nix build
+**/result

@@ -1,0 +1,2 @@
+[CCode (gir_namespace = "Flurr", gir_version = "@API_VERSION@")]
+namespace Flurr {}

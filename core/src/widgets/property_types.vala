@@ -19,10 +19,10 @@ public enum Anchor {
  * Reexport of GtkLayerShell.Layer.
  */
 public enum Layer {
-  BACKGROUND = GtkLayerShell.Layer.BACKGROUND,
-  BOTTOM = GtkLayerShell.Layer.BOTTOM,
-  TOP = GtkLayerShell.Layer.TOP,
-  OVERLAY = GtkLayerShell.Layer.OVERLAY;
+  BACKGROUND,
+  BOTTOM,
+  TOP,
+  OVERLAY;
 
   /**
    * Checks if the given value matches a member of Layer.
@@ -36,9 +36,9 @@ public enum Layer {
  * Reexport of GtkLayerShell.KeyboardMode.
  */
 public enum KeyboardMode {
-  NONE = GtkLayerShell.KeyboardMode.NONE,
-  EXCLUSIVE = GtkLayerShell.KeyboardMode.EXCLUSIVE,
-  ON_DEMAND = GtkLayerShell.KeyboardMode.ON_DEMAND;
+  NONE,
+  EXCLUSIVE,
+  ON_DEMAND;
 
   /**
    * Checks if the given value matches a member of KeyboardMode.
